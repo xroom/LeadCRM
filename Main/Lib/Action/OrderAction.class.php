@@ -106,6 +106,9 @@ class OrderAction extends PublicAction {
 		$this->assign('active_order_import','active');
     	$this->display();
     }
+    /**
+     * 导入数据
+     */
     public function importData(){
     	set_time_limit(0);
     	header('Content-Type:text/html;charset=utf-8');
@@ -113,6 +116,7 @@ class OrderAction extends PublicAction {
     	$Model = D('Order');
     	$count_success = 0;
     	$count_error = 0;
+    	$importResult = array();
     	if($uploadInfo){
 			$list = $this->getCsv('./Uploads/'.$uploadInfo[0]['savename']);
 			$result = array();
@@ -126,7 +130,7 @@ class OrderAction extends PublicAction {
 				//echo '<pre>';
 				//print_r($value);
 				$data = array();
-				$data['id'] = $value[0];
+				$data['order_id'] = $value[0];
 				$data['tmall_name'] = $value[1];
 				$data['email']	= $value[2];
 				$data['tmall_order_status'] = $value[10];
@@ -238,8 +242,11 @@ class OrderAction extends PublicAction {
 
 
 				//检查是否存在该订单号
-				$info = $Model->where(array('id'=>$data['id']))->find();
-
+				$checkMap = array();
+				$checkMap['order_id'] = $data['order_id'];
+				$checkMap['product_name'] = $data['product_name'];
+				$info = $Model->where($checkMap)->find();
+			
 				if(count($info) > 0){
 					
 					//如果是更新的订单,并且状态为 手机号重复,则不处理。 过了导入的状态，也不再处理。
@@ -248,19 +255,29 @@ class OrderAction extends PublicAction {
 						continue;
 						//unset($data['status']);
 					}
+					$data['id'] = $info['id'];
 					//die('update');
 					//执行更新
-					$Model->create();
+					$Model->create($data);
 					$res = $Model->save($data);
 
 					if($res){
 						$count_success++;
 						Log::write('更新成功：'.$data['id'], Log::DEBUG);
-						echo '更新成功 <a href="'.__APP__.'/Order/edit/id/'.$data['id'].'">'.$data['id']."</a><br />";
+						//echo '更新成功 <a href="'.__APP__.'/Order/edit/id/'.$data['id'].'">'.$data['id']."</a><br />";
+
+							$importResult[] = array(
+							'id'=>$info['id'],
+							'status' => '更新成功'
+							);
 
 					}else{
 						$count_error++;
 						Log::write('更新失败：'.$Model->getLastSql(), Log::DEBUG);
+							$importResult[] = array(
+							'id'=>$info['id'],
+							'status' => '更新失败'
+							);
 					}
 				}else{
 					
@@ -279,19 +296,27 @@ class OrderAction extends PublicAction {
 
 					//die('insert'.print_r($data,true));
 
-					$Model->create();
+					$Model->create($data);
 					$res = $Model->add($data);
 
 					if($res){
 						Log::write('添加成功：'.$data['id'], Log::DEBUG);
 						$count_success++;
 
-						echo '添加成功 <a href="'.__APP__.'/Order/edit/id/'.$data['id'].'">'.$data['id']."</a><br />";
+						//echo '添加成功 <a href="'.__APP__.'/Order/edit/id/'.$data['id'].'">'.$data['id']."</a><br />";
+							$importResult[] = array(
+							'id'=>$res,
+							'status' => '添加成功'
+							);
 						
 					}else{
 						Log::write('添加失败：'.$Model->getLastSql() , Log::DEBUG);
 						$count_error++;
 						//$this->error('导入失败');
+						$importResult[] = array(
+							'id'=>$res,
+							'status' => '添加失败'
+							);
 
 					}
 
@@ -308,6 +333,14 @@ class OrderAction extends PublicAction {
 
     	}
 
+    	$this->assign('title_h2','导入成功');
+		$this->addBreadcrumbs(array(
+				'name' => '导入成功'
+		));
+		$this->assign('importResult',$importResult);
+		$this->assign('countSuccess',$count_success);
+		$this->assign('countError',$count_error);
+    	$this->display('Public:import_result');
     	//$this->success('导入成功'.$count_success.'条, 失败'.$count_error.'条',__APP__.'/Order/import/&success='.$count_success.'&error='.$count_error);
 
     }
@@ -454,7 +487,16 @@ class OrderAction extends PublicAction {
 
 			break;
 			default:
-				$res = $Model->select();
+				$map = array();
+				if(isset($_GET['status'])){
+					$map['status'] = $_GET['status'];
+				}
+				$res = $Model->where($map)->select();
+				foreach ($res as $key => $value) {
+					foreach($value as $key1 =>$value1 ){
+						$res[$key][$key1] = iconv('UTF-8','gbk',$value1);
+					}
+				}
 				break;
 		}
 		
