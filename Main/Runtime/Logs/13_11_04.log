@@ -1,0 +1,41 @@
+[ 2013-11-04T23:08:24+08:00 ] 0.0.0.0 /LeadCRM/index.php?s=/Order/index/status/9
+INFO: [ route_check ] --START--
+INFO: Run CheckRoute Behavior [ RunTime:0.001510s ]
+INFO: [ route_check ] --END-- [ RunTime:0.001588s ]
+INFO: [ app_begin ] --START--
+INFO: Run ReadHtmlCache Behavior [ RunTime:-0.000621s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001044s ]
+SQL: SHOW COLUMNS FROM `ihg_order` [ RunTime:0.005093s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `ihg_order` WHERE ( `status` = 9 ) LIMIT 1   [ RunTime:0.000536s ]
+SQL: SELECT * FROM `ihg_order` WHERE ( `status` = 9 ) ORDER BY mobile LIMIT 0,25   [ RunTime:0.001481s ]
+INFO: [ view_template ] --START--
+INFO: Run LocationTemplate Behavior [ RunTime:-1.042682s ]
+INFO: [ view_template ] --END-- [ RunTime:0.001790s ]
+INFO: [ view_parse ] --START--
+NOTIC: [8] Undefined variable: active_order_import D:\AppServ\www\LeadCRM\Main\Runtime\Cache\53759519c00f0f23af9277b03e29743c.php 第 597 行.
+NOTIC: [8] Undefined variable: active_order_export D:\AppServ\www\LeadCRM\Main\Runtime\Cache\53759519c00f0f23af9277b03e29743c.php 第 605 行.
+NOTIC: [8] Undefined variable: active_sms D:\AppServ\www\LeadCRM\Main\Runtime\Cache\53759519c00f0f23af9277b03e29743c.php 第 618 行.
+NOTIC: [8] Undefined variable: active_sms_import D:\AppServ\www\LeadCRM\Main\Runtime\Cache\53759519c00f0f23af9277b03e29743c.php 第 632 行.
+NOTIC: [8] Undefined variable: access_ob D:\AppServ\www\LeadCRM\Main\Runtime\Cache\53759519c00f0f23af9277b03e29743c.php 第 642 行.
+NOTIC: [8] Undefined variable: active_ob D:\AppServ\www\LeadCRM\Main\Runtime\Cache\53759519c00f0f23af9277b03e29743c.php 第 642 行.
+NOTIC: [8] Undefined variable: active_ob_1 D:\AppServ\www\LeadCRM\Main\Runtime\Cache\53759519c00f0f23af9277b03e29743c.php 第 656 行.
+NOTIC: [8] Undefined variable: active_ob_4 D:\AppServ\www\LeadCRM\Main\Runtime\Cache\53759519c00f0f23af9277b03e29743c.php 第 663 行.
+NOTIC: [8] Undefined variable: active_ob_5 D:\AppServ\www\LeadCRM\Main\Runtime\Cache\53759519c00f0f23af9277b03e29743c.php 第 671 行.
+NOTIC: [8] Undefined variable: active_ob_15 D:\AppServ\www\LeadCRM\Main\Runtime\Cache\53759519c00f0f23af9277b03e29743c.php 第 679 行.
+NOTIC: [8] Undefined variable: active_ts D:\AppServ\www\LeadCRM\Main\Runtime\Cache\53759519c00f0f23af9277b03e29743c.php 第 688 行.
+NOTIC: [8] Undefined variable: active_ts_import D:\AppServ\www\LeadCRM\Main\Runtime\Cache\53759519c00f0f23af9277b03e29743c.php 第 702 行.
+NOTIC: [8] Undefined index: url D:\AppServ\www\LeadCRM\Main\Runtime\Cache\53759519c00f0f23af9277b03e29743c.php 第 904 行.
+NOTIC: [8] Undefined index: url D:\AppServ\www\LeadCRM\Main\Runtime\Cache\53759519c00f0f23af9277b03e29743c.php 第 904 行.
+NOTIC: [8] Undefined offset: 15 D:\AppServ\www\LeadCRM\Main\Common\common.php 第 51 行.
+INFO: Run ParseTemplate Behavior [ RunTime:-1.044520s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.026176s ]
+INFO: [ view_filter ] --START--
+INFO: Run ContentReplace Behavior [ RunTime:-1.070758s ]
+INFO: Run TokenBuild Behavior [ RunTime:-1.072335s ]
+INFO: Run WriteHtmlCache Behavior [ RunTime:-1.073284s ]
+INFO: Run ShowRuntime Behavior [ RunTime:-1.074240s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.004482s ]
+INFO: [ view_end ] --START--
+INFO: Run ShowPageTrace Behavior [ RunTime:-1.075319s ]
+INFO: [ view_end ] --END-- [ RunTime:0.001220s ]
+

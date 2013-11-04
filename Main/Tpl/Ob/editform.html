@@ -1,0 +1,338 @@
+<div class="portlet box blue tabbable">
+
+							<div class="portlet-title">
+
+								<div class="caption">
+
+									<i class="icon-reorder"></i>
+
+									<span class="hidden-480">订单详情</span>
+
+								</div>
+
+							</div>
+
+							<div class="portlet-body form">
+
+								
+											<!-- BEGIN FORM-->
+
+											<form action="__URL__/update" method="POST" class="form-horizontal">
+
+												<div class="control-group">
+
+													<label class="control-label">订单编号</label>
+
+													<div class="controls">
+
+														<span class="help-inline">{$vo.id}</span>
+
+														<span class="help-inline">天猫的订单号</span>
+
+													</div>
+
+												</div>
+
+												<div class="control-group">
+
+													<label class="control-label">邮箱</label>
+
+													<div class="controls">
+
+														[{$vo.email}] 
+														<span class="help-inline">如果是手机号，则判断为信息无效</span>
+
+													</div>
+
+												</div>
+
+												<div class="control-group">
+
+													<label class="control-label">商品名称</label>
+
+													<div class="controls">
+
+														{$vo.product_name}
+
+														
+
+													</div>
+
+												</div>
+
+												<div class="control-group">
+
+													<label class="control-label">数量</label>
+
+													<div class="controls">
+
+														{$vo.count}
+
+														
+
+													</div>
+
+												</div>
+
+
+
+												
+												<div class="control-group">
+
+													<label class="control-label">手机号</label>
+
+													<div class="controls">
+
+
+														<span class="help-block">【{$vo.mobile}】</span>
+
+													</div>
+
+												</div>
+
+												<div class="control-group">
+
+													<label class="control-label">固定电话</label>
+
+													<div class="controls">
+
+														<span class="help-block">【{$vo.phone}】</span>
+
+													</div>
+
+												</div>
+												<div class="control-group">
+
+													<label class="control-label">备注</label>
+
+													<div class="controls">
+
+														{$vo.comment}
+
+													</div>
+
+												</div>
+
+
+
+												<div class="control-group">
+
+													<label class="control-label">是否取得联系</label>
+
+													<div class="controls">
+
+														<label class="radio">
+														<div class="radio "><span class="checked"><input type="radio" name="isConnect" value="1" checked="checked" class="radio_isconnect"></span></div>
+
+														是
+
+														</label>
+
+														<label class="radio">
+														<div class="radio "><span><input type="radio" name="isConnect" value="0" class="radio_isconnect"></span></div>
+
+														否[如果还想尝试联系，请不要保存]
+
+														</label>
+
+														
+														
+
+													</div>
+
+												</div>
+
+												<div id="isConnect">
+
+												<div class="control-group">
+
+													<label class="control-label">是否拥有优悦会卡号</label>
+
+													<div class="controls">
+
+														
+															<label class="radio">
+														<div class="radio"><span class="checked"><input type="radio" name="haveCard" value="1" checked="checked" class="radio_havecard"></span></div>
+
+														是
+
+														</label>
+
+														<label class="radio">
+														<div class="radio"><span><input type="radio" name="haveCard" value="0" class="radio_havecard"></span></div>
+
+														否
+
+														</label>
+													</div>
+
+												</div>
+
+
+												<div id="haveCard">
+												<div class="control-group">
+
+													<label class="control-label">请确认优悦会卡号</label>
+
+													<div class="controls">
+
+														<input type="text" placeholder="输入忧悦会卡号" class="m-wrap medium" name="card" value="{$vo.card}">
+
+														<span class="help-block">【{$vo.card}】</span>
+
+													</div>
+
+												</div>
+												</div> <!-- end of havecard -->
+
+												<div id="noCard">
+												<div class="control-group">
+
+													<label class="control-label">是否愿意加入忧悦会</label>
+
+													<div class="controls">
+
+
+															<label class="radio">
+														<div class="radio"><span class="checked"><input type="radio" name="acceptJoin" value="1" checked="checked" class="radio_acceptjoin"></span></div>
+
+														是
+
+														</label>
+
+														<label class="radio">
+														<div class="radio"><span><input type="radio" name="acceptJoin" value="0" class="radio_acceptjoin"></span></div>
+
+														否
+
+														</label>
+
+													</div>
+
+												</div>
+
+
+												<div id="acceptJoin">
+												<div class="control-group">
+
+													<label class="control-label">确认收货人姓名</label>
+
+													<div class="controls">
+
+														<input type="text" placeholder="输入收货人姓名" class="m-wrap medium" name="name" value="{$vo.name}">
+
+														<span class="help-block">【{$vo.name}】</span>
+
+
+													</div>
+
+												</div>
+
+
+												<div class="control-group">
+
+													<label class="control-label">确认收货地址</label>
+
+													<div class="controls">
+
+
+														<span class="help-block">【{$vo.address}】</span>
+
+													</div>
+
+												</div>
+
+												<div class="control-group">
+
+													<label class="control-label">确认邮箱</label>
+
+													<div class="controls">
+
+														<input type="text" placeholder="请输入电子邮件" class="m-wrap medium" name="email" value="{$vo.email}">
+
+														<span class="help-block">【{$vo.email}】</span>
+
+													</div>
+
+												</div>
+												</div> <!-- accept join -->
+												</div> <!-- end of no card -->
+												</div> <!-- end isconnect -->
+
+												
+
+
+												<div class="control-group">
+
+													<label class="control-label">客服备注</label>
+
+													<div class="controls">
+
+														<textarea class="span6 m-wrap" rows="3" name="ob_comment"></textarea>
+
+													</div>
+
+												</div>
+
+
+												<div class="control-group">
+
+													<label class="control-label">当前状态</label>
+
+													<div class="controls">
+
+														<span class="label {$item.status|getOrderStatusLabel} label-mini">{$vo.status|getOrderStatus}</span>
+
+														
+
+													</div>
+
+												</div>
+
+												<div class="form-actions" >
+													<input type="hidden" name="id" value="{$vo.id}" />
+													<button type="submit" class="btn blue"><i class="icon-ok"></i> Save</button>
+
+													<button type="button" class="btn" onclick="window.history.go(-1)">Cancel</button>
+
+												</div>
+
+											</form>
+
+											<!-- END FORM-->  
+
+							</div>
+					</div>
+
+<script type="text/javascript">
+	
+	$('.radio_isconnect').click(function(){
+		if($(this).val() == 1){
+			$('#isConnect').show();
+		}else{
+			$('#isConnect').hide();
+		}
+	})
+
+	$('.radio_havecard').click(function(){
+		if($(this).val() == 1){
+			$('#noCard').hide();
+			$('#haveCard').show();
+		}else{
+			$('#noCard').show();
+			$('#haveCard').hide();
+		}
+	})
+	
+	$('.radio_acceptjoin').click(function(){
+		if($(this).val() == 1){
+			$('#acceptJoin').show();
+		}else{
+			$('#acceptJoin').hide();
+		}
+	})
+
+	//init
+	$('#noCard').hide();
+
+</script>

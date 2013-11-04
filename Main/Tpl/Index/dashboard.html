@@ -1,0 +1,168 @@
+<div id="dashboard">
+
+					<!-- BEGIN DASHBOARD STATS -->
+
+					<div class="row-fluid">
+
+						<div class="span3 responsive" data-tablet="span6" data-desktop="span3">
+
+							<div class="dashboard-stat blue">
+
+								<div class="visual">
+
+									<i class="icon-th"></i>
+
+								</div>
+
+								<div class="details">
+
+									<div class="number">
+
+{$count_total}
+									</div>
+
+									<div class="desc">                           
+
+										当天订单数量
+
+									</div>
+
+								</div>
+
+								<a class="more" href="#">
+
+								View more <i class="m-icon-swapright m-icon-white"></i>
+
+								</a>                 
+
+							</div>
+
+						</div>
+
+						<div class="span3 responsive" data-tablet="span6" data-desktop="span3">
+
+							<div class="dashboard-stat green">
+
+								<div class="visual">
+
+									<i class="icon-shopping-cart"></i>
+
+								</div>
+
+								<div class="details">
+
+									<div class="number">?</div>
+
+									<div class="desc">待客服处理单数</div>
+
+								</div>
+
+								<a class="more" href="#">
+
+								View more <i class="m-icon-swapright m-icon-white"></i>
+
+								</a>                 
+
+							</div>
+
+						</div>
+
+						<div class="span3 responsive" data-tablet="span6  fix-offset" data-desktop="span3">
+
+							<div class="dashboard-stat purple">
+
+								<div class="visual">
+
+									<i class="icon-globe"></i>
+
+								</div>
+
+								<div class="details">
+
+									<div class="number">?</div>
+
+									<div class="desc">待800TS处理单数</div>
+
+								</div>
+
+								<a class="more" href="#">
+
+								View more <i class="m-icon-swapright m-icon-white"></i>
+
+								</a>                 
+
+							</div>
+
+						</div>
+
+
+
+
+						<div class="span3 responsive" data-tablet="span6" data-desktop="span3">
+
+							<div class="dashboard-stat yellow">
+
+								<div class="visual">
+
+									<i class="icon-user-md"></i>
+
+								</div>
+
+								<div class="details">
+
+									<div class="number">?</div>
+
+									<div class="desc">待马尼拉处理单数</div>
+
+								</div>
+
+								<a class="more" href="#">
+
+								View more <i class="m-icon-swapright m-icon-white"></i>
+
+								</a>                 
+
+							</div>
+
+						</div>
+
+
+						
+
+					</div>
+
+					<!-- END DASHBOARD STATS -->
+
+					<div class="clearfix"></div>
+
+
+					<div>
+						
+<div id="chart_div" style="width: 90%;"></div>
+							<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['日期', '销量'],
+        {$googleChart}
+        ]);
+
+        var options = {
+          title: '2013年双十一销量走势图',
+          hAxis: {title: '2013年10月30日 - 2013年11月11日', titleTextStyle: {color: 'red'}}
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+					</div>
+
+
+
+					</div>
+			
+
+</div>

@@ -1,0 +1,241 @@
+<!-- BEGIN SIDEBAR -->
+
+		<div class="page-sidebar nav-collapse collapse">
+
+			<!-- BEGIN SIDEBAR MENU -->        
+
+			<ul class="page-sidebar-menu">
+
+				<li>
+
+					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+
+					<div class="sidebar-toggler hidden-phone"></div>
+
+					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+
+				</li>
+
+				<li>
+
+					<!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+
+					<form class="sidebar-search">
+
+						<div class="input-box">
+
+							<a href="javascript:;" class="remove"></a>
+
+							<input type="text" placeholder="Search..." />
+
+							<input type="button" class="submit" value=" " />
+
+						</div>
+
+					</form>
+
+					<!-- END RESPONSIVE QUICK SEARCH FORM -->
+
+				</li>
+
+				<li class="start ">
+
+					<a href="__APP__/Index">
+
+					<i class="icon-home"></i> 
+
+					<span class="title">首页</span>
+
+					</a>
+
+				</li>
+			<if condition="$access_admin eq 1 " >
+				<li class="{$active_order} " >
+
+					<a href="javascript:;">
+
+					<i class="icon-th"></i> 
+
+					<span class="title">订单管理</span>
+
+					<span class="selected"></span>
+
+					<span class="arrow open"></span>
+
+					</a>
+
+					<ul class="sub-menu">
+
+						<li class="{$active_order_index}">
+
+							<a href="__APP__/Order/index">
+
+							订单列表</a>
+
+						</li>
+
+						<li class="{$active_order_import}">
+
+							<a href="__APP__/Order/import">
+							导入订单
+							</a>
+
+						</li>
+
+						<li class="{$active_order_export}">
+
+							<a href="__APP__/Order/export">
+							导出订单
+							</a>
+
+						</li>
+
+					</ul>
+
+				</li>
+
+
+				<li class="{$active_sms}">
+
+					<a href="javascript:;">
+
+					<i class="icon-comments"></i> 
+
+					<span class="title">短信平台</span>
+
+					<span class="arrow "></span>
+
+					</a>
+
+					<ul class="sub-menu">
+
+						<li class="{$active_sms_import}">
+
+							<a href="__APP__/Sms/import">
+
+							导入短信回复内容</a>
+
+						</li>
+
+					</ul>
+				</li>
+
+				</if>
+				<if condition="$access_ob eq 1 or $access_admin eq 1 ">
+				<li class="{$active_ob}">
+
+					<a href="javascript:;">
+
+					<i class="icon-headphones"></i> 
+
+					<span class="title">客服平台</span>
+
+					<span class="arrow "></span>
+
+					</a>
+
+					<ul class="sub-menu">
+
+						<li class="{$active_ob_1}">
+
+							<a href="__APP__/Ob/index/status/1">
+
+							卡号有误</a>
+
+						</li>
+						<li class="{$active_ob_4}">
+
+							<a href="__APP__/Ob/index/status/4">
+
+							信息有误</a>
+
+						</li>
+
+						<li class="{$active_ob_5}">
+
+							<a href="__APP__/Ob/index/status/5">
+
+							手机号重复</a>
+
+						</li>
+
+						<li class="{$active_ob_15}">
+
+							<a href="__APP__/Ob/index/status/15">
+
+							信息无效</a>
+
+						</li>
+					</ul>
+				</li>
+				</if>
+				<if condition="$access_admin eq 1 " >
+				<li class="{$active_ts}">
+
+					<a href="javascript:;">
+
+					<i class="icon-user"></i> 
+
+					<span class="title">800TS</span>
+
+					<span class="arrow "></span>
+
+					</a>
+
+					<ul class="sub-menu">
+
+						<li class="{$active_ts_import}">
+
+							<a href="__APP__/Ts/import">
+
+							导入800TS处理结果</a>
+
+						</li>
+					</ul>
+				</li>
+
+				<li class="">
+
+					<a href="javascript:;">
+
+					<i class="icon-user-md"></i> 
+
+					<span class="title">马尼拉团队</span>
+
+					<span class="arrow "></span>
+
+					</a>
+
+					<ul class="sub-menu">
+
+						<li >
+
+							<a href="maps_google.html">
+
+							导入马尼拉团队处理结果</a>
+
+						</li>
+					</ul>
+				</li>
+</if>
+
+
+				<li class="last ">
+
+					<a href="charts.html">
+
+					<i class="icon-question-sign"></i> 
+
+					<span class="title">帮助</span>
+
+					</a>
+
+				</li>
+
+			</ul>
+
+			<!-- END SIDEBAR MENU -->
+
+		</div>
+
+		<!-- END SIDEBAR -->

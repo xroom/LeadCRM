@@ -1,0 +1,293 @@
+<div class="portlet box blue tabbable">
+
+							<div class="portlet-title">
+
+								<div class="caption">
+
+									<i class="icon-reorder"></i>
+
+									<span class="hidden-480">订单详情</span>
+
+								</div>
+
+							</div>
+
+							<div class="portlet-body form">
+
+								
+											<!-- BEGIN FORM-->
+
+											<form action="__URL__/update" method="POST" class="form-horizontal">
+
+												<div class="control-group">
+
+													<label class="control-label">订单编号</label>
+
+													<div class="controls">
+
+														<span class="help-inline">{$vo.id}</span>
+
+														<span class="help-inline">天猫的订单号</span>
+
+													</div>
+
+												</div>
+
+												<div class="control-group">
+
+													<label class="control-label">商品名称</label>
+
+													<div class="controls">
+
+														{$vo.product_name}
+
+														
+
+													</div>
+
+												</div>
+
+												<div class="control-group">
+
+													<label class="control-label">数量</label>
+
+													<div class="controls">
+
+														{$vo.count}
+
+														
+
+													</div>
+
+												</div>
+
+
+
+												
+
+
+												<div class="control-group" style="display:none">
+
+													<label class="control-label">是否取得联系</label>
+
+													<div class="controls">
+
+														<label class="radio">
+														<div class="radio"><span class="checked"><input type="radio" name="isConnect" value="1" checked="checked"></span></div>
+
+														是
+
+														</label>
+
+														<label class="radio">
+														<div class="radio"><span><input type="radio" name="isConnect" value="0"></span></div>
+
+														否
+
+														</label>
+
+														
+														
+
+													</div>
+
+												</div>
+
+												<div class="control-group" style="display:none">
+
+													<label class="control-label">是否愿意加入忧悦会</label>
+
+													<div class="controls">
+
+
+															<label class="radio">
+														<div class="radio"><span class="checked"><input type="radio" name="acceptJoin" value="1" checked="checked"></span></div>
+
+														是
+
+														</label>
+
+														<label class="radio">
+														<div class="radio"><span><input type="radio" name="acceptJoin" value="0"></span></div>
+
+														否
+
+														</label>
+
+													</div>
+
+												</div>
+
+												<div class="control-group" style="display:none">
+
+													<label class="control-label">是否拥有优悦会卡号</label>
+
+													<div class="controls">
+
+														
+															<label class="radio">
+														<div class="radio"><span class="checked"><input type="radio" name="haveCard" value="1" checked="checked"></span></div>
+
+														是
+
+														</label>
+
+														<label class="radio">
+														<div class="radio"><span><input type="radio" name="haveCard" value="0"></span></div>
+
+														否
+
+														</label>
+													</div>
+
+												</div>
+
+												<div class="control-group">
+
+													<label class="control-label">请确认优悦会卡号</label>
+
+													<div class="controls">
+
+														<input type="text" placeholder="输入忧悦会卡号" class="m-wrap medium" name="card" value="{$vo.card}">
+
+														<span class="help-block">【{$vo.card}】</span>
+
+													</div>
+
+												</div>
+
+												
+
+												<div class="control-group">
+
+													<label class="control-label">请确认手机号</label>
+
+													<div class="controls">
+
+
+													<input type="text" placeholder="请输入手机号" class="m-wrap medium" name="mobile" value="{$vo.mobile}">
+														<span class="help-block">【{$vo.mobile}】</span>
+
+													</div>
+
+												</div>
+
+												<div class="control-group">
+
+													<label class="control-label">请确认固定电话</label>
+
+													<div class="controls">
+
+														<input type="text" placeholder="输入固定电话" class="m-wrap medium" name="phone" value="{$vo.phone}">
+
+														<span class="help-block">【{$vo.phone}】</span>
+
+													</div>
+
+												</div>
+
+
+												<div class="control-group">
+
+													<label class="control-label">确认收货人姓名</label>
+
+													<div class="controls">
+
+														<input type="text" placeholder="输入收货人姓名" class="m-wrap medium" name="name" value="{$vo.name}">
+
+														<span class="help-block">【{$vo.name}】</span>
+														<span class="help-block">拼音【{$vo.name_py}】</span>
+
+
+													</div>
+
+												</div>
+
+
+												<div class="control-group">
+
+													<label class="control-label">确认收货地址</label>
+
+													<div class="controls">
+
+														<input type="text" placeholder="请输入收货人地址" class="m-wrap medium" name="address" value="{$vo.address}">
+
+														<span class="help-block">【{$vo.address}】</span>
+														<span class="help-block">拼音【{$vo.address_py}】<</span>
+
+													</div>
+
+												</div>
+
+												<div class="control-group">
+
+													<label class="control-label">确认邮箱</label>
+
+													<div class="controls">
+
+														<input type="text" placeholder="请输入电子邮件" class="m-wrap medium" name="email" value="{$vo.email}">
+
+														<span class="help-block">【{$vo.email}】</span>
+
+													</div>
+
+												</div>
+
+									
+
+												<div class="control-group">
+
+													<label class="control-label">备注</label>
+
+													<div class="controls">
+
+														{$vo.comment}
+
+													</div>
+
+												</div>
+
+												<div class="control-group">
+
+													<label class="control-label">淘宝客服备注</label>
+
+													<div class="controls">
+
+														{$vo.comment_ob}
+
+													</div>
+
+												</div>
+
+
+												<div class="control-group">
+
+													<label class="control-label">当前状态</label>
+
+													<div class="controls">
+
+
+														<select name="status" >
+														<volist name="statusList" id="item" key="k">
+															<option value="{$k-1}" <if condition="$k-1 eq $vo[status]">selected=selected</if> >{$item}</option>
+														</volist>
+														</select>
+
+													</div>
+
+												</div>
+
+												<div class="form-actions" >
+													<input type="hidden" name="id" value="{$vo.id}" />
+													<button type="submit" class="btn blue"><i class="icon-ok"></i> Save</button>
+
+													<button type="button" class="btn" onclick="window.history.go(-1)">Cancel</button>
+
+												</div>
+
+											</form>
+
+											<!-- END FORM-->  
+
+							</div>
+					</div>
