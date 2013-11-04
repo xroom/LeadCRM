@@ -345,7 +345,7 @@ class OrderAction extends PublicAction {
 				$count++;
 				foreach ($data as $key => $vo) {
 
-					$res[$count]['mobile'] = "\t".$vo['mobile'];
+					$res[$count]['mobile'] = $vo['mobile'];
 					$res[$count]['tmall_name'] = iconv('UTF-8','gbk',$vo['tmall_name']);
 					$res[$count]['card'] = "\t".$vo['card'];
 					$res[$count]['comment_ob'] = iconv('UTF-8','gbk', $vo['comment_ob']);
@@ -382,9 +382,9 @@ class OrderAction extends PublicAction {
 				foreach ($data as $key => $vo) {
 
 					
-					$res[$count]['mobile'] = "\t".$vo['mobile'];
+					$res[$count]['mobile'] = $vo['mobile'];
 					$res[$count]['tmall_name'] = iconv('UTF-8','gbk', $vo['tmall_name']);
-					$res[$count]['name'] = iconv('UTF-8','gbk', $vo['name']);
+					$res[$count]['name'] = iconv('UTF-8','gbk',$vo['name']);
 					$res[$count]['email'] = iconv('UTF-8','gbk', $vo['email']);
 					$res[$count]['comment'] = iconv('UTF-8','gbk', $vo['comment']);
 					$res[$count]['id'] = $vo['id'];
@@ -400,9 +400,11 @@ class OrderAction extends PublicAction {
 				$count = 0;
 				//$res[$count] = getFieldName();
 				$res[$count]['id'] = '订单ID';
+				$res[$count]['name'] = '姓名拼音';
 				$res[$count]['name_py'] = '姓名拼音';
 				$res[$count]['mobile'] = '手机';
 				$res[$count]['email'] = '电子邮件';
+				$res[$count]['address'] = '姓名拼音';
 				$res[$count]['address_py'] = '地址拼音';
 				$res[$count]['new_card'] = '注册的卡号';
 				//$res[$count]['reg_success'] = '注册是否成功';
@@ -426,6 +428,7 @@ class OrderAction extends PublicAction {
 					}
 					*/
 					$res[$count]['id'] = "\t".$vo['id'];
+					$res[$count]['name'] = iconv('UTF-8','gbk',$vo['name']);
 					$res[$count]['name_py'] = ucwords($this->convertPinyin($vo['name']));
 //					$res[$count]['mobile'] = "\t".empty($vo['mobile'])?$vo['phone']:$vo['mobile'];
 					if(empty($vo['mobile'])){
@@ -435,6 +438,8 @@ class OrderAction extends PublicAction {
 					}
 					
 					$res[$count]['email'] = $vo['email'];
+
+					$res[$count]['address'] = iconv('UTF-8','gbk',$vo['address']);
 					$res[$count]['address_py'] = $this->convertHaf(strtoupper($this->convertPinyin($vo['address'])));
 
 
