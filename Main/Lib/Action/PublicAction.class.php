@@ -4,6 +4,11 @@ class PublicAction extends Action {
 	var $breadcrumbs;
    
     public function menuAccess(){
+
+        if(empty($_SESSION['username'])){
+            $this->error('请登录', __APP__.'/Public/login');
+        }
+
         //权限管理
       switch($_SESSION['username']){
         case 'admin':
@@ -27,7 +32,18 @@ class PublicAction extends Action {
       $this->success('退出成功',__APP__.'/Public/login');
     }
     public function checkLogin(){
+        
     	$_SESSION['username'] = $_POST['username'];
+
+        if($_POST['username'] == 'admin' && $_POST['password'] != '123qwe'){
+            $this->error('用户名密码错误');
+        }
+
+        if($_POST['username'] == 'ob' && $_POST['password'] != 'ob'){
+            $this->error('用户名密码错误');
+        }
+
+
     	header('location:'.__APP__.'/Index');
     }
 
