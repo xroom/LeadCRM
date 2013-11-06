@@ -107,6 +107,7 @@ class SmsAction extends PublicAction {
 
 					//更新到数据库中
 					$data['id'] = $item['id'];
+					$data['type'] = 'import_sms_update';
 					$Model->create($data);
 					$resUpdate = $Model->save($data);
 					//echo $Model->getLastSql();
@@ -142,6 +143,8 @@ class SmsAction extends PublicAction {
 					foreach ($list as $key => $item) {
 						if($item['status'] <= 5 || $item['status'] == 15){
 							$data['id'] = $item['id'];
+							$data['type'] = 'import_sms_du_update';
+
 							$Model->create($data);
 							$Model->save($data);
 

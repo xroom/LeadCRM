@@ -50,7 +50,7 @@ class OrderAction extends PublicAction {
 		$Page       = new Page($count,25);// 实例化分页类 传入总记录数和每页显示的记录数
 		$show       = $Page->show();// 分页显示输出
 		// 进行分页数据查询 注意limit方法的参数要使用Page类的属性
-		$list = $Model->order('mobile')->where($map)->limit($Page->firstRow.','.$Page->listRows)->select();
+		$list = $Model->order('tmall_create_time DESC')->where($map)->limit($Page->firstRow.','.$Page->listRows)->select();
 		//echo $Model->getLastSql();
 		$this->assign('list',$list);// 赋值数据集
 		$this->assign('page',$show);// 赋值分页输出
@@ -77,6 +77,12 @@ class OrderAction extends PublicAction {
 		//获取下拉列表
 		$this->assign('statusList',getOrderStatus());
 
+		//获取客服备注
+		$ModelOb = D('Ob');
+		$obInfo = $ModelOb->where(array('order_id'=>$filter['id']))->find();
+		$this->assign('obInfo',$obInfo);
+
+
 		//获取更新日志
 		$this->assign('log',S('Order_'.$filter['id']));
     	$this->display();
@@ -90,6 +96,7 @@ class OrderAction extends PublicAction {
    		$_POST['name_py'] = $this->convertPinyin($_POST['name_py']);
    		$_POST['address_py'] = $this->convertPinyin($_POST['address_py']);
 
+   		$_POST['type'] = 'update';
    		$Model->create();
    		$result = $Model->save();
 
@@ -264,6 +271,7 @@ class OrderAction extends PublicAction {
 					$data['id'] = $info['id'];
 					//die('update');
 					//执行更新
+					$data['type'] = 'import_update';
 					$Model->create($data);
 					$res = $Model->save($data);
 
@@ -293,15 +301,16 @@ class OrderAction extends PublicAction {
 						$updateMobile = array();
 						$updateMobile['id'] = $phoneCheck['id'];
 						$updateMobile['status'] = 5;
+						$updateMobile['type'] = 'import_du_update';
 						$updateModel = D('Order');
-						$updateModel->create();
+						$updateModel->create($updateMobile);
 						$updateModel->save($updateMobile);
 						
 						
 					}
 
 					//die('insert'.print_r($data,true));
-
+					$data['type'] = 'import_insert';
 					$Model->create($data);
 					$res = $Model->add($data);
 

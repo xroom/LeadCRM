@@ -1,5 +1,5 @@
 <?php
-Class OrderModel extends AdvModel{
+Class ObModel extends AdvModel{
 
 	public function _after_update(&$result,$option){
 

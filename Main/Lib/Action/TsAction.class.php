@@ -78,6 +78,8 @@ class TsAction extends PublicAction {
 
 
 				$data['id'] = $info['id'];
+				$data['type'] = 'import_ts_update';
+
 				$Model->create($data);
 				$res = $Model->save($data);
 				//echo $Model->getLastSql();

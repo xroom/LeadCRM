@@ -75,5 +75,27 @@ function is_email($email){
 function dateformat($time,$format){
   return date($format,$time);
 }
+function getTimelineStatus($status = null){
+   $data = array(
+       'insert'=> '新增',
+       'update' => '手工更新',
+       'import_update' => '天猫导入更新',
+      'import_insert' => '天猫导入新增',
+      'import_du_update' => '天猫导入重复信息更新',
 
+      'import_sms_update' => '短信导入更新',
+      'import_sms_du_update' => '短信导入重复信息更新',
+
+      'ob_update' => '客服备注更新',
+      'ob_insert' => '客服备注添加',
+       'import_ts_update' => '800TS导入',
+       '' => '未知操作',
+    );
+     if(is_null($status)){
+    return $data;
+   }else{
+     return $data[$status];
+
+   }
+}
 ?>

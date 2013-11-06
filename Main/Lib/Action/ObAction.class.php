@@ -115,6 +115,7 @@ class ObAction extends PublicAction {
    		
 
    		$Model = D('Order');
+         $_POST['type'] = 'update';
    		$Model->create();
 
    		$result = $Model->save();
@@ -145,10 +146,12 @@ class ObAction extends PublicAction {
    		if($info){
 	   		$_POST['id'] = $info['id'];
 	   		$_POST['update_time'] = mktime();
+            $_POST['type'] = 'ob_update';
    			$ModelOb -> create();
 	   		$ModelOb->save();
    		}else{
 			unset($_POST['id']);
+         $_POST['type'] = 'ob_insert';
    			$ModelOb -> create();
 	   		$resultOb = $ModelOb -> add();
 	   	}

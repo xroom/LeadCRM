@@ -17,7 +17,7 @@
 
 								<div class="timeline-body">
 
-									<h2><if condition="$vo.type eq 'update'">更新<else /> 插入</if>
+									<h2>{$vo.type|getTimelineStatus}
 									<small><a href="">查看详细更新内容</a></small>
 									</h2>
 
