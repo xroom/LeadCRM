@@ -40,7 +40,7 @@ class TsAction extends PublicAction {
 				if(empty($value[0]))continue;
 				
 				//如果大于当前状态，则不更新。
-				$info = $Model->where(array('id'=>$value[0]))->find();
+				$info = $Model->where(array('id'=>trim($value[0])))->find();
 				if($info['status'] > 10 || $info['status'] == 15){
 					continue;
 				}

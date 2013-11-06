@@ -26,6 +26,7 @@ class SmsAction extends PublicAction {
     	$Model = D('Order');
     	$count_success = 0;
     	$count_error = 0;
+    	$count_ig = 0;
     	if($uploadInfo){
 			$list = $this->getCsv('./Uploads/'.$uploadInfo[0]['savename']);
     		//导入excel 文件 
@@ -35,15 +36,19 @@ class SmsAction extends PublicAction {
 			foreach ($list as $key => $value) {
 				if($key == 0) continue; //过滤掉第一行
 
-				if(empty($value[0]))continue;
+				if(empty($value[0])){
+					$count_ig++;
+					continue;
+				}
 				
 
 				//找到当前该手机号的所有订单
 				
-				$map['mobile'] = $value[0];
+				$map['mobile'] = trim($value[0]);
 				$list = $Model->where($map)->select();
 				foreach ($list as $key1 => $item) {
 					if($item['status'] >5 && $item['status'] != 15){ //如果是确认以上状态，则不处理该订单
+						$count_ig++;
 						continue;
 					}
 					//查询一下这个手机号的订单
