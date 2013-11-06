@@ -145,8 +145,8 @@ class PublicAction extends Action {
     //change 
     $_String = str_replace('重庆','CHONGQING',$_String);
     $_String = str_replace('省', 'SHENG', $_String);
-    
-
+    $_String = str_replace('大厦', 'DASHA', $_String);
+	$_String = str_replace('闵行', 'MINHANG', $_String);
 
     $start = mktime();
 
