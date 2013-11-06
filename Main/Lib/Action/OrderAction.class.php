@@ -31,6 +31,10 @@ class OrderAction extends PublicAction {
 			$map['id'] = $_GET['id'];
 
 		}
+		if(!empty($_GET['order_id']) && is_numeric($_GET['order_id'])){
+			$map['order_id'] = $_GET['order_id'];
+
+		}
 		if(!empty($_GET['status']) && is_numeric($_GET['status'])){
 			$map['status']= $_GET['status'];
 

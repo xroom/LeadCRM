@@ -63,6 +63,8 @@ class TsAction extends PublicAction {
 				//echo $Model->getLastSql();
 				if($res){
 					echo 'Update Success, set to '.getOrderStatus($data['status']).'  <a href="'.__APP__.'/Order/edit/id/'.$data['id'].'">'.$data['id']."</a><br />";
+				}else{
+						
 				}
 			}
 			echo '操作完成<br />';
