@@ -12,5 +12,7 @@ return array(
 	 'DB_PORT'   => 3306, // 端口
 	 'DB_PREFIX' => 'ihg_', // 数据库表前缀
 
+
+	 'DATA_CACHE_SUBDIR'=>true,
 );
 ?>

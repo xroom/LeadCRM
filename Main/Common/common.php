@@ -72,6 +72,8 @@ function getFieldName($str){
 function is_email($email){
   return strlen($email) > 6 && preg_match("/^[\w\-\.]+@[\w\-]+(\.\w+)+$/", $email);
 }
-
+function dateformat($time,$format){
+  return date($format,$time);
+}
 
 ?>

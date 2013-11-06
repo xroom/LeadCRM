@@ -69,7 +69,7 @@ class OrderAction extends PublicAction {
 		$this->assign('active_order_index','active');
 
 		$Model = D('Order');
-		$filter['id'] = $_GET['id'];
+		$filter['id'] = intval($_GET['id']);
 		$vo = $Model->where($filter)->find();
 		//echo $Model->getLastSql();
 		$this->assign('vo',$vo);
@@ -77,6 +77,8 @@ class OrderAction extends PublicAction {
 		//获取下拉列表
 		$this->assign('statusList',getOrderStatus());
 
+		//获取更新日志
+		$this->assign('log',S('Order_'.$filter['id']));
     	$this->display();
     }
     public function update(){
