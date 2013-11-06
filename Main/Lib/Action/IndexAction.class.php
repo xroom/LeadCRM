@@ -14,11 +14,12 @@ class IndexAction extends PublicAction {
 
 
 		$Model=D('Order');
-		$this->assign('count_total',$Model->count());
+		$count = $Model->query("select sum(count) as count from __TABLE__");
+		$this->assign('count_total',$count[0]['count']);
 
 
 		//相关数据
- 		$data = $Model->query("select DATE_FORMAT(tmall_create_time,'%Y%m%d') days,count(id) count from __TABLE__ group by days;  ");
+ 		$data = $Model->query("select DATE_FORMAT(tmall_create_time,'%Y%m%d') days,sum(count) count from __TABLE__ group by days;  ");
  		
  		foreach ($data as $key => $value) {
  			$googleChart[] = "
