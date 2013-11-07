@@ -94,7 +94,8 @@ class SmsAction extends PublicAction {
 									$data['status'] = 6; //需要注册
 								}else if(strlen($sms) == 9 && is_numeric($sms)){
 									//如果有数字，并且为９位，则标记为信息确认
-									$data['status'] = 7; 
+									$data['status'] = 7;
+									$data['card'] = $sms;
 								}else{
 									$data['status'] = 4; //信息有误
 								}
