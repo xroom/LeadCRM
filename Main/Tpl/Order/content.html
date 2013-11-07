@@ -16,6 +16,8 @@
 卡号：<input type="text" name="card" /> <br />
 订单号：<input type="text" name="order_id" />
 编号：<input type="text" name="id" />
+淘宝ID：<input type="text" name="tmall_name" />
+姓名：<input type="text" name="name" />
 <input type="hidden" value="/Order/index" name="s" />
 <input type="submit" value="搜索"/>
 </div>
@@ -70,7 +72,7 @@
 
 											<td class="hidden-phone">{$item.name}</td>
 
-											<td>{$item.mobile}</td>
+											<td><a href="__URL__/index/mobile/{$item.mobile}">{$item.mobile}</a></td>
 											<td>{$item.card}</td>
 											<td>{$item.tmall_create_time}</td>
 											<td><span class="label {$item.status|getOrderStatusLabel} label-mini">{$item.status|getOrderStatus}</span></td>
