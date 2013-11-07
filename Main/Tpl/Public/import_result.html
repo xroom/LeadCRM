@@ -61,6 +61,7 @@
 
 										
 											<th>操作状态</th>
+											<th>导入的数据</th>
 
 										</tr>
 
@@ -72,7 +73,7 @@
 
 											<td><a target="_blank" href="__APP__/Order/edit/id/{$item.id}">{$item.id}</a></td>
 											<td>{$item.status}</td>
-
+											<td><pre>{$item.data}</pre></td>
 										</tr>
 										</volist>
 

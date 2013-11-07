@@ -276,6 +276,10 @@ class OrderAction extends PublicAction {
 					//如果是更新的订单,并且状态为 手机号重复,则不处理。 过了导入的状态，也不再处理。
 					if($data['status'] >= 5 && $data['status'] != 15 ){
 						Log::write('状态已经变更，过滤'.$data['id'], Log::DEBUG);
+						$importResult[] = array(
+							'id'=>$info['id'],
+							'status' => '状态已经变更，忽略'
+							);
 						continue;
 						//unset($data['status']);
 					}
@@ -350,12 +354,8 @@ class OrderAction extends PublicAction {
 				}
 				
 
-				//die('One');
 			}
 
-			//print_r($dupPhone);
-
-			//exit;
 
     	}
 

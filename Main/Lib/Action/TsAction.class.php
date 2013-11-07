@@ -42,7 +42,8 @@ class TsAction extends PublicAction {
 					$count_ig++;
 					$importResult[] = array(
 							'id'=>$value['id'],
-							'status' => '主ID为空，忽略'
+							'status' => '主ID为空，忽略',
+							'data' => print_r($value,true)
 							);
 					continue;
 				}
@@ -52,7 +53,8 @@ class TsAction extends PublicAction {
 					$count_ig++;
 					$importResult[] = array(
 							'id'=>$value[0],
-							'status' => '没有找到当前订单'
+							'status' => '没有找到当前订单',
+							'data' => print_r($value,true)
 							);
 					continue;
 				}
@@ -60,7 +62,8 @@ class TsAction extends PublicAction {
 					$count_ig++;
 					$importResult[] = array(
 							'id'=>$value[0],
-							'status' => '状态不符，忽略'
+							'status' => '状态不符，忽略',
+							'data' => print_r($value,true)
 							);
 					continue;
 				}
@@ -87,14 +90,16 @@ class TsAction extends PublicAction {
 					$count_success++;
 					$importResult[] = array(
 							'id'=>$data['id'],
-							'status' => '更新成功,更新到'.getOrderStatus($data['status'])
+							'status' => '更新成功,更新到'.getOrderStatus($data['status']),
+							'data' => print_r($value,true)
 					);
 					//echo 'Update Success, set to '.getOrderStatus($data['status']).'  <a href="'.__APP__.'/Order/edit/id/'.$data['id'].'">'.$data['id']."</a><br />";
 				}else{
 					$count_error ++;
 					$importResult[] = array(
 							'id'=>$data['id'],
-							'status' => '不需要更新，状态为：'.getOrderStatus($data['status'])
+							'status' => '不需要更新，状态为：'.getOrderStatus($data['status']),
+							'data' => print_r($value,true)
 					);	
 				}
 			}

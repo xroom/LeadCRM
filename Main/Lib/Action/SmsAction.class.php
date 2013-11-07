@@ -43,7 +43,6 @@ class SmsAction extends PublicAction {
 							'id'=>$value['id'],
 							'status' => '主ID为空，忽略'
 							);
-					die('aa');
 					continue;
 				}
 				
@@ -64,7 +63,8 @@ class SmsAction extends PublicAction {
 						$count_ig++;
 						$importResult[] = array(
 							'id'=>$item['id'],
-							'status' => '状态不符合，忽略'
+							'status' => '当前状态为['.getOrderStatus($item['status']).']，忽略',
+							'data' => print_r($value,true)
 							);
 						continue;
 					}
@@ -97,7 +97,29 @@ class SmsAction extends PublicAction {
 									$data['status'] = 7;
 									$data['card'] = $sms;
 								}else{
-									$data['status'] = 4; //信息有误
+
+									//判断内容中是否有一组9位数 数字
+									preg_match_all( "/\d+/", $sms , $numList );
+									$countNum = 0;
+									if(count($numList[0]) == 0){
+										$data['status'] = 4;
+									}else{
+										foreach ($numList[0] as $key1 => $value1) {
+											if(strlen($value1) == 9){
+												$data['card'] 	= $value1;
+												$data['status'] = 7;
+												$countNum++;
+											}
+										}
+										//如果没有找到属于9个的，或者两组以上9位的
+										if(empty($data['card']) || $countNum > 1){
+											$data['status'] = 4;
+											unset($data['card']);
+										}
+
+
+									}
+									
 								}
 
 							}
@@ -105,6 +127,7 @@ class SmsAction extends PublicAction {
 							
 							break;
 					}
+
 
 					//更新到数据库中
 					$data['id'] = $item['id'];
@@ -119,13 +142,15 @@ class SmsAction extends PublicAction {
 							$count_success++;
 							$importResult[] = array(
 									'id'=>$data['id'],
-									'status' => '更新成功,更新到'.getOrderStatus($data['status'])
+									'status' => '更新成功,更新到'.getOrderStatus($data['status']),
+									'data' => print_r($value,true)
 							);
 					}else{
 						$count_error ++;
 							$importResult[] = array(
 									'id'=>$data['id'],
-									'status' => '不需要更新,更新到'.getOrderStatus($data['status'])
+									'status' => '不需要更新',
+									'data' => print_r($value,true)
 							);
 					}
 				
@@ -133,8 +158,8 @@ class SmsAction extends PublicAction {
 
 				}
 			}
-			foreach ($countNum as $key => $value) {
-				if(count($value)>1) 	{
+			foreach ($countNum as $key => $value1) {
+				if(count($value1)>1) 	{
 					//更新状态为信息无效
 					$data = array();
 					$data['status'] = 15;
@@ -152,7 +177,8 @@ class SmsAction extends PublicAction {
 							//echo 'Update Success, set to '.$data['status'].'  <a href="'.__APP__.'/Order/edit/id/'.$data['id'].'">'.$data['id']."</a><br />";
 							$importResult[] = array(
 							'id'=>$item['id'],
-							'status' => '找到重复手机号，更改状态'.getOrderStatus($data['status'])
+							'status' => '找到重复手机号，更改状态'.getOrderStatus($data['status']),
+							'data' => print_r($value,true)
 							);
 						}
 					}

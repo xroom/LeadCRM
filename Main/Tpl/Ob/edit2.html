@@ -1,0 +1,173 @@
+<include file="../header" />
+					
+				<!-- BEGIN PAGE CONTENT-->
+
+				<div class="row-fluid">
+					
+				<div class="portlet box blue tabbable">
+
+							<div class="portlet-title">
+
+								<div class="caption">
+
+									<i class="icon-reorder"></i>
+
+									<span class="hidden-480">订单详情</span>
+
+								</div>
+
+							</div>
+
+							<div class="portlet-body form">
+
+								
+											<!-- BEGIN FORM-->
+
+											<form action="__URL__/update2" method="POST" class="form-horizontal">
+
+												<div class="control-group">
+
+													<label class="control-label">订单编号</label>
+
+													<div class="controls">
+
+														<span class="help-inline">{$vo.order_id}</span>
+
+														<span class="help-inline">天猫的订单号</span>
+
+													</div>
+
+												</div>
+
+												<div class="control-group">
+
+													<label class="control-label">邮箱</label>
+
+													<div class="controls">
+
+														[{$vo.email}] 
+														<span class="help-inline">如果是手机号，则判断为信息无效</span>
+
+													</div>
+
+												</div>
+
+												<div class="control-group">
+
+													<label class="control-label">商品名称</label>
+
+													<div class="controls">
+
+														{$vo.product_name}
+
+														
+
+													</div>
+
+												</div>
+
+												<div class="control-group">
+
+													<label class="control-label">数量</label>
+
+													<div class="controls">
+
+														{$vo.count}
+
+														
+
+													</div>
+
+												</div>
+
+
+
+												
+												<div class="control-group">
+
+													<label class="control-label">手机号</label>
+
+													<div class="controls">
+
+
+														<span class="help-block">【{$vo.mobile}】</span>
+
+													</div>
+
+												</div>
+
+												<div class="control-group">
+
+													<label class="control-label">固定电话</label>
+
+													<div class="controls">
+
+														<span class="help-block">【{$vo.phone}】</span>
+
+													</div>
+
+												</div>
+												<div class="control-group">
+
+													<label class="control-label">备注</label>
+
+													<div class="controls">
+
+														{$vo.comment}
+
+													</div>
+
+												</div>
+												
+
+
+												<div class="control-group">
+
+													<label class="control-label">客服备注</label>
+
+													<div class="controls">
+
+														<textarea class="span6 m-wrap" rows="3" name="ob_comment">{$ob.ob_comment}</textarea>
+<span class="help-inline">填写多帐号分配情况</span>
+													</div>
+
+												</div>
+
+
+												<div class="control-group">
+
+													<label class="control-label">当前状态</label>
+
+													<div class="controls">
+
+														<span class="label {$item.status|getOrderStatusLabel} label-mini">{$vo.status|getOrderStatus}</span>
+
+														
+
+													</div>
+
+												</div>
+
+												<div class="form-actions" >
+													<input type="hidden" name="id" value="{$vo.id}" />
+													<button type="submit" class="btn blue"><i class="icon-ok"></i> Save</button>
+
+													<button type="button" class="btn" onclick="window.history.go(-1)">Cancel</button>
+
+												</div>
+
+											</form>
+
+											<!-- END FORM-->  
+
+							</div>
+					</div>
+
+
+
+				</div>
+			
+
+				<!-- END PAGE CONTENT-->
+
+<include file="../footer" />

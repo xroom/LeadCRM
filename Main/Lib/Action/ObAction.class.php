@@ -54,7 +54,14 @@ class ObAction extends PublicAction {
 		$this->assign('vo',$vo);
 
 		
+       $ModelOb = D('Ob');
+         $filter = array();
+         $filter['order_id'] = $_GET['id'];
+         $ob = $ModelOb->where($filter)->find();
+         
+         $this->assign('ob',$ob);
 
+         
 		$this->assign('active_ob_'.$vo['status'],'active');
 
     	$this->display();
@@ -168,4 +175,69 @@ class ObAction extends PublicAction {
    		$this->success('更新成功');
 
    	}
+      public function edit2(){
+         $this->assign('title_h2','详情');
+         $this->addBreadcrumbs(array(
+               'name' => '多帐号共享处理'
+         ));
+         
+
+         $Model = D('Order');
+         $filter['id'] = $_GET['id'];
+         $vo = $Model->where($filter)->find();
+
+         //echo $Model->getLastSql();
+         $this->assign('vo',$vo);
+
+         $ModelOb = D('Ob');
+         $filter = array();
+         $filter['order_id'] = $_GET['id'];
+         $ob = $ModelOb->where($filter)->find();
+         
+         $this->assign('ob',$ob);
+
+         $this->assign('active_ob_'.$vo['status'],'active');
+
+         $this->display();
+      }
+      public function update2(){
+         if(empty($_POST['ob_comment'])){
+            $this->error('请填写备注');
+         }
+
+         
+         $data['status'] = 16;
+         $data['id'] = intval($_POST['id']); 
+         $data['type'] = 'ob_du_update';
+
+         $Model = D('Order');
+         $Model->create($data);
+         $res = $Model->save($data);
+         //if($res){
+
+
+            $ModelOb = D('Ob');
+            $info = $ModelOb->where(array('order_id'=>$data['id']))->find();
+            
+            if($info){
+               $data2['ob_comment'] = $_POST['ob_comment'];
+               $data2['id'] = $info['id'];
+               $ModelOb->create($data2);
+               $ModelOb->save($data2);
+               
+            }else{
+               $data2['ob_comment'] = $_POST['ob_comment'];
+               $data2['create_time'] = mktime();
+               $data2['order_id'] = $data['id'];
+               $ModelOb->create($data2);
+               $ModelOb->add($data2);
+               $res = $ModelOb->getLastSql();
+               
+            }
+            
+            $this->success('更新成功');
+         //}else{
+           // $this->error('更新失败');
+         //}
+      }
 }
