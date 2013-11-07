@@ -78,7 +78,7 @@ function dateformat($time,$format){
 function getTimelineStatus($status = null){
    $data = array(
        'insert'=> '新增',
-       'update' => '手工更新',
+       'update' => '更新',
        'import_update' => '天猫导入更新',
       'import_insert' => '天猫导入新增',
       'import_du_update' => '天猫导入重复信息更新',
