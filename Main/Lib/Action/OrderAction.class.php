@@ -36,9 +36,20 @@ class OrderAction extends PublicAction {
 
 		}
 		if(!empty($_GET['status']) && is_numeric($_GET['status'])){
-			$map['status']= $_GET['status'];
+			$map['status']= intval($_GET['status']);
 
 		}
+
+		if(!empty($_GET['name'])){
+			$map['name']= ($_GET['name']);
+
+		}
+
+		if(!empty($_GET['tmall_name'])){
+			$map['tmall_name']= ($_GET['tmall_name']);
+
+		}
+
 
 		//获取数据
 		$Model = D('Order');
