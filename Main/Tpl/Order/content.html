@@ -50,8 +50,8 @@
 
 										<tr>
 
-											<th><i class="icon-briefcase"></i> 订单号</th>
-
+											<th><i class="icon-briefcase"></i> ID</th>
+											<th>天猫订单号</th>
 											<th class="hidden-phone"><i class="icon-user"></i> 姓名</th>
 
 											<th><i class="icon-phone"></i> 电话</th>
@@ -68,7 +68,8 @@
 										<volist name="list" id="item">
 										<tr>
 
-											<td><a href="__APP__/Order/edit">{$item.id}</a></td>
+											<td><a href="__APP__/Order/edit/id/{$item.id}">{$item.id}</a></td>
+											<td><a href="__APP__/Order/edit/id/{$item.id}">{$item.order_id}</a></td>
 
 											<td class="hidden-phone">{$item.name}</td>
 

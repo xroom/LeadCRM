@@ -140,6 +140,7 @@ class OrderAction extends PublicAction {
     	$Model = D('Order');
     	$count_success = 0;
     	$count_error = 0;
+    	$count_ig = 0;
     	$importResult = array();
     	if($uploadInfo){
 			$list = $this->getCsv('./Uploads/'.$uploadInfo[0]['savename']);
@@ -169,11 +170,26 @@ class OrderAction extends PublicAction {
 				$data['count'] = $value[24];
 				$data['status'] = 0;
 
+				//判断订单号是否合法
 				
+				if(strlen($data['order_id']) < 15 ){
+					$count_ig++;
+					$importResult[] = array(
+							'id'=>$data['order_id'],
+							'status' => '订单ID不合法，请检查表格',
+							);
+						continue;
+				};
+
 				//判断订单状态
 				if($data['tmall_order_status'] != '买家已付款，等待卖家发货'){
 					Log::write('未付款，过滤'.$data['id'], Log::DEBUG);
-					continue;
+						$count_ig++;
+					$importResult[] = array(
+							'id'=>$data['order_id'],
+							'status' => '未付款，忽略',
+							);
+						continue;
 				}
 
 				//自有处理信息
@@ -200,10 +216,16 @@ class OrderAction extends PublicAction {
 				}else{
 					Log::write('宝贝名称不符，过滤'.$data['id'], Log::DEBUG);
 					//die('continue');
+					$count_ig++;
+					$importResult[] = array(
+							'id'=>$data['order_id'],
+							'status' => '宝贝名称不符，忽略',
+							);
 					continue;
 				}
 
 
+				
 
 				//提取卡号
 				preg_match_all( "/\d+/", $data['comment'], $numList );
@@ -276,6 +298,7 @@ class OrderAction extends PublicAction {
 					//如果是更新的订单,并且状态为 手机号重复,则不处理。 过了导入的状态，也不再处理。
 					if($data['status'] >= 5 && $data['status'] != 15 ){
 						Log::write('状态已经变更，过滤'.$data['id'], Log::DEBUG);
+						$count_ig++;
 						$importResult[] = array(
 							'id'=>$info['id'],
 							'status' => '状态已经变更，忽略'
@@ -366,6 +389,8 @@ class OrderAction extends PublicAction {
 		$this->assign('importResult',$importResult);
 		$this->assign('countSuccess',$count_success);
 		$this->assign('countError',$count_error);
+		$this->assign('countIg',$count_ig);
+
     	$this->display('Public:import_result');
     	//$this->success('导入成功'.$count_success.'条, 失败'.$count_error.'条',__APP__.'/Order/import/&success='.$count_success.'&error='.$count_error);
 
@@ -541,8 +566,11 @@ class OrderAction extends PublicAction {
         Header("Location: ".$filename); 
     }
 	public function test(){
-echo 		$this->convertHaf('JIANGSUXING WUXISHI JIANGYINSHI (BUYAOXIEWUXISHI ，ZHIJIEJIANGYINSHI )HUANGTUZHEN XIAOHUSHUICHANSHI CHANG 7HAO (213004)');
-
+//echo 		$this->convertHaf('JIANGSUXING WUXISHI JIANGYINSHI (BUYAOXIEWUXISHI ，ZHIJIEJIANGYINSHI )HUANGTUZHEN XIAOHUSHUICHANSHI CHANG 7HAO (213004)');
+		$a = 12345000012300;
+		if(substr($a, -4) == '0000'){
+			die('aa');
+		};
 	}
 	public function convertHaf($word){
 		$tags = $word;
