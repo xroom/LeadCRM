@@ -536,17 +536,26 @@ class OrderAction extends PublicAction {
 				break;
 			case 7: //信息确认，准备注入
 
-			break;
+			//break;
 			default:
 				$map = array();
 				if(isset($_GET['status'])){
 					$map['status'] = $_GET['status'];
 				}
-				$res = $Model->where($map)->select();
-				foreach ($res as $key => $value) {
+				
+				$data = $Model->where($map)->select();
+
+				$count = 0;
+				
+				foreach($data[0] as $key=>$value){
+					$res[$count][$key] = iconv('UTF-8','gbk',getFieldName($key));
+				}
+				$count++;
+				foreach ($data as $key => $value) {
 					foreach($value as $key1 =>$value1 ){
-						$res[$key][$key1] = iconv('UTF-8','gbk',$value1);
+						$res[$count][$key1] = iconv('UTF-8','gbk',$value1);
 					}
+					$count++;
 				}
 				break;
 		}
