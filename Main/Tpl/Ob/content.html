@@ -1,5 +1,19 @@
 <link rel="stylesheet" href="media/css/DT_bootstrap.css" />
+<div class="row-fluid">
+<form name="search" action="__URL__/index" method="GET">
 
+<div class="span12">
+手机号：<input type="text" name="mobile" />
+卡号：<input type="text" name="card" /> <br />
+订单号：<input type="text" name="order_id" />
+编号：<input type="text" name="id" /><br />
+淘宝ID：<input type="text" name="tmall_name" />
+姓名：<input type="text" name="name" />
+<input type="hidden" value="/Ob/index" name="s" />
+<input type="submit" value="搜索"/>
+</div>
+</form>
+</div>
 
 <div class="row-fluid">
 
@@ -28,7 +42,8 @@
 
 										<tr>
 
-											<th><i class="icon-briefcase"></i> 订单号</th>
+											<th><i class="icon-briefcase"></i>ID</th>
+											<th>订单编码</th>
 
 											<th class="hidden-phone"><i class="icon-user"></i> 姓名</th>
 
@@ -47,7 +62,7 @@
 										<tr>
 
 											<td><a href="__APP__/Order/edit">{$item.id}</a></td>
-
+											<td class="hidden-phone">{$item.order_id}</td>
 											<td class="hidden-phone">{$item.name}</td>
 
 											<td>{$item.mobile}</td>

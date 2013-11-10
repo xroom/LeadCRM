@@ -18,6 +18,40 @@ class ObAction extends PublicAction {
 		));
 		$this->assign('active_ob_'.intval($_GET['status']),'active');
 
+		$this->assign('active_order_index','active');
+
+		if(!empty($_GET['mobile']) && is_numeric($_GET['mobile']) ){
+			$map['mobile'] = ($_GET['mobile']);
+		}
+		if(!empty($_GET['card'])  && is_numeric($_GET['card']) ){
+			$map['card'] = ($_GET['card']);
+
+		}
+		if(!empty($_GET['id']) && is_numeric($_GET['id'])){
+			$map['id'] = $_GET['id'];
+
+		}
+		if(!empty($_GET['order_id']) && is_numeric($_GET['order_id'])){
+			$map['order_id'] = $_GET['order_id'];
+
+		}
+		if(!empty($_GET['status']) && is_numeric($_GET['status'])){
+			$map['status']= intval($_GET['status']);
+
+		}
+
+		if(!empty($_GET['name'])){
+			$map['name']= ($_GET['name']);
+
+		}
+
+		if(!empty($_GET['tmall_name'])){
+			$map['tmall_name']= ($_GET['tmall_name']);
+
+		}
+
+
+
 		//获取数据
 		$Model = D('Order');
 
@@ -32,7 +66,21 @@ class ObAction extends PublicAction {
 		$Page       = new Page($count,25);// 实例化分页类 传入总记录数和每页显示的记录数
 		$show       = $Page->show();// 分页显示输出
 		// 进行分页数据查询 注意limit方法的参数要使用Page类的属性
-		$list = $Model->order('id')->where($map)->limit($Page->firstRow.','.$Page->listRows)->select();
+		
+		switch($map['status']){
+			case 5:
+				$order = 'mobile';
+			break;
+			case 1:
+			case 4:
+			
+			case 15:
+				
+			default:
+				$order = 'tmall_create_time';
+		}
+
+		$list = $Model->order($order)->where($map)->limit($Page->firstRow.','.$Page->listRows)->select();
 		$this->assign('list',$list);// 赋值数据集
 		$this->assign('page',$show);// 赋值分页输出
 
