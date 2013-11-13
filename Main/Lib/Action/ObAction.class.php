@@ -167,6 +167,12 @@ class ObAction extends PublicAction {
    			$_POST['address_py'] = $this->convertPinyin($_POST['address']);
    		}
 
+         //判断电子邮件
+         if($_POST['acceptJoin'] == 1  && !is_email($_POST['email'])){
+            $this->error('请填写正确的电子邮件');
+         }
+
+
    		
 
    		$Model = D('Order');
