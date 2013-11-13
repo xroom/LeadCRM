@@ -210,56 +210,119 @@ class SmsAction extends PublicAction {
    		$this->display();
    }
    function batchSave(){
-   		$data['status'] = intval($_POST['status']);
-   		$data['type'] = 'import_sms_batch_update';
-   		$Model = D('Order');
-   		$list = explode("\n",$_POST['mobile']);
    		$count_success = 0;
     	$count_error = 0;
     	$count_ig = 0;
     	$hasImport = array();
-   		foreach ($list as $key => $value) {
-   			if(empty($value)) continue;
 
-   			
-   			//查找
-   			
-   			$map['mobile'] = trim($value);
 
-   			$info = $Model->where($map)->select();
+   		$data['status'] = intval($_POST['status']);
+   		$data['type'] = 'import_sms_batch_update';
+   		$Model = D('Order');
+   		$list = explode("\n",$_POST['mobile']);
 
-   			foreach ($info as $row => $item) {
-
-   				if($hasImport[$item['id']]){
-   					continue;
-   				}else{
-   					$hasImport[$item['id']] = $item['id'];
-   				}
-
-   				$data['id'] = $item['id'];
-	   			$Model->create($data);
-	   			$res = $Model->save($data);
-
-	   			//echo $Model->getLastSql();
-	   			
-	   			if($res){
-	   				$count_success++;
-		   			$importResult[] = array(
-					'id'=>$item['id'],
-					'status' => '更新成功 '.getOrderStatus($data['status']),
-					'data' => print_r($value,true)
-					);
-	   			}else{
-	   				$count_error++;
+   		/**
+   		 * 如果导入卡号
+   		 */
+   		if(isset($_POST['importCard'])){
+   			foreach ($list as $key => $value) {
+   				if(empty($value)) continue; 
+   				$card = explode("\t",$value);
+   				if(empty($card[1]) || strlen($card[1]) != 9){ //如果卡号不为11,则忽略
+   					$count_ig++;
 	   				$importResult[] = array(
-					'id'=>$item['id'],
-					'status' => '更新失败 '.getOrderStatus($data['status']),
-					'data' => print_r($value,true)
+					'id'=>'',
+					'status' => '卡号不准确 ,忽略',
+					'data' => print_r($card,true)
 					);
-	   			}
-   			}
+					continue;
+   				}
+   				$map = array();
+   				$map['mobile'] = $card[0];
+   				$info = $Model->where($map)->select();
 
-   		}
+	   			foreach ($info as $row => $item) {
+
+	   				if($hasImport[$item['id']]){
+	   					continue;
+	   				}else{
+	   					$hasImport[$item['id']] = $item['id'];
+	   				}
+
+	   				$data['id'] = $item['id'];
+	   				$data['card'] = $card[1];
+	   				$data['status'] = 7 ; //信息确认
+	   				
+		   			$Model->create($data);
+		   			$res = $Model->save($data);
+
+		   			
+		   			if($res){
+		   				$count_success++;
+			   			$importResult[] = array(
+						'id'=>$item['id'],
+						'status' => '更新成功 '.getOrderStatus($data['status']),
+						'data' => print_r($value,true)
+						);
+		   			}else{
+		   				$count_error++;
+		   				$importResult[] = array(
+						'id'=>$item['id'],
+						'status' => '更新失败 '.getOrderStatus($data['status']),
+						'data' => print_r($value,true)
+						);
+		   			}
+	   			}
+
+
+   			}
+   		}else{
+
+   		
+	   		foreach ($list as $key => $value) {
+	   			if(empty($value)) continue;
+
+	   			
+	   			//查找
+	   			
+	   			$map['mobile'] = trim($value);
+
+	   			$info = $Model->where($map)->select();
+
+	   			foreach ($info as $row => $item) {
+
+	   				if($hasImport[$item['id']]){
+	   					continue;
+	   				}else{
+	   					$hasImport[$item['id']] = $item['id'];
+	   				}
+
+	   				$data['id'] = $item['id'];
+	   				
+		   			$Model->create($data);
+		   			$res = $Model->save($data);
+
+		   			//echo $Model->getLastSql();
+		   			
+		   			if($res){
+		   				$count_success++;
+			   			$importResult[] = array(
+						'id'=>$item['id'],
+						'status' => '更新成功 '.getOrderStatus($data['status']),
+						'data' => print_r($value,true)
+						);
+		   			}else{
+		   				$count_error++;
+		   				$importResult[] = array(
+						'id'=>$item['id'],
+						'status' => '更新失败 '.getOrderStatus($data['status']),
+						'data' => print_r($value,true)
+						);
+		   			}
+	   			}
+
+	   		}
+	   	}
 
    			$this->assign('importResult',$importResult);
 			$this->assign('countSuccess',$count_success);

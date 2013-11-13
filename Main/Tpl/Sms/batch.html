@@ -7,7 +7,7 @@
 					<form id="fileupload" action="__URL__/batchSave" method="POST" enctype="multipart/form-data">
 
 							<textarea name="mobile" cols="50" rows="10"></textarea>
-
+							<br /><input type="checkbox" name="importCard">导入卡号，并更改状态为［信息确认］
 							<div class="control-group">
 
 													<label class="control-label">当前状态</label>
@@ -25,8 +25,23 @@
 
 												</div>
 
+							<div class="control-group">
+
+													<label class="control-label">示例</label>
+
+													<div class="controls">
+							<code>
+							更新卡号格式<br/>
+							13601605650	123456789<br />
+							更新状态<br />
+							13601605650<br />
+							</code>
+													</div>
+							</div>
 
 							<input type="submit" />
+
+						
 					</form>
 					
 
