@@ -146,7 +146,16 @@ class PublicAction extends Action {
     $_String = str_replace('重庆','CHONGQING',$_String);
     $_String = str_replace('省', 'SHENG', $_String);
     $_String = str_replace('大厦', 'DASHA', $_String);
-	$_String = str_replace('闵行', 'MINHANG', $_String);
+	  $_String = str_replace('闵行', 'MINHANG', $_String);
+    $_String = str_replace('大', 'DA', $_String);
+    $_String = str_replace('行', 'HANG', $_String);
+    $_String = str_replace('朝阳', 'CHAOYANG', $_String);
+    $_String = str_replace('家', 'JIA', $_String);
+    $_String = str_replace('乐', 'LE', $_String);
+    $_String = str_replace('科', 'KE', $_String);
+    $_String = str_replace('会', 'HUI', $_String);
+    $_String = str_replace('牙', 'YA', $_String);
+    $_String = str_replace('佛', 'FO', $_String);
 
     $start = mktime();
 
@@ -204,4 +213,7 @@ class PublicAction extends Action {
     //echo strtoupper($res);
     return $res;
     }  
+    public function setReturnUrl(){
+      cookie('return_url','http://'.$_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
+    }
 }
