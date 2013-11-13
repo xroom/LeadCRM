@@ -92,10 +92,14 @@ function getTimelineStatus($status = null){
        'import_ts_update' => '800TS导入',
        '' => '未知操作',
     );
-     if(is_null($status)){
+  if(is_null($status)){
     return $data;
    }else{
-     return $data[$status];
+      if(isset($data['status'])){
+             return $data[$status];
+      }else{
+        return $status;
+      }
 
    }
 }

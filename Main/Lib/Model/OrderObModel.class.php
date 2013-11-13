@@ -1,6 +1,5 @@
 <?php
 Class ObModel extends AdvModel{
-
 	public function _after_update(&$result,$option){
 
 		//更新后，执行日志操作

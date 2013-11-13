@@ -2,7 +2,7 @@
 Class OrderModel extends AdvModel{
 
 	public function _after_update(&$result,$option){
-
+		
 		//更新后，执行日志操作
 		$data = $result;
 		$data['sql_run_time'] = mktime();
