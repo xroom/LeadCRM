@@ -14,6 +14,7 @@ class OrderAction extends PublicAction {
 	}
     public function index(){
 		
+		$this->setReturnUrl();
 		$this->assign('title_h2','列表');
 		$this->addBreadcrumbs(array(
 				'name' => '订单列表'
@@ -117,7 +118,7 @@ class OrderAction extends PublicAction {
    		//echo $Model->getLastSql();
    		//exit;
    		if($result){
-   			$this->success('更新成功');
+   			$this->success('更新成功', cookie('return_url'));
    		}else{
    			$this->error('更新失败');
    		}
@@ -220,6 +221,7 @@ class OrderAction extends PublicAction {
 					$importResult[] = array(
 							'id'=>$data['order_id'],
 							'status' => '宝贝名称不符，忽略',
+							'data'=> $data['product_name'],
 							);
 					continue;
 				}
