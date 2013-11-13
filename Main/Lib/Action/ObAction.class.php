@@ -12,6 +12,7 @@ class ObAction extends PublicAction {
 
 	}
    	public function index(){
+      $this->setReturnUrl();
    		$this->assign('title_h2','列表');
 		$this->addBreadcrumbs(array(
 				'name' => '订单列表'
@@ -167,8 +168,9 @@ class ObAction extends PublicAction {
    			$_POST['address_py'] = $this->convertPinyin($_POST['address']);
    		}
 
+
          //判断电子邮件
-         if($_POST['acceptJoin'] == 1  && !is_email($_POST['email'])){
+         if($_POST['haveCard'] == 0  && !is_email($_POST['email'])){
             $this->error('请填写正确的电子邮件');
          }
 
@@ -226,7 +228,7 @@ class ObAction extends PublicAction {
    		}
 	*/
 
-   		$this->success('更新成功');
+   		$this->success('更新成功',cookie('return_url'));
 
    	}
       public function edit2(){
