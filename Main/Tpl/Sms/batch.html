@@ -1,0 +1,39 @@
+<include file="../header" />
+					
+				<!-- BEGIN PAGE CONTENT-->
+
+				<div class="row-fluid">
+
+					<form id="fileupload" action="__URL__/batchSave" method="POST" enctype="multipart/form-data">
+
+							<textarea name="mobile" cols="50" rows="10"></textarea>
+
+							<div class="control-group">
+
+													<label class="control-label">当前状态</label>
+
+													<div class="controls">
+
+
+														<select name="status" >
+														<volist name="statusList" id="item" key="k">
+															<option value="{$k-1}" <if condition="$k-1 eq $vo[status]">selected=selected</if> >{$item}</option>
+														</volist>
+														</select>
+
+													</div>
+
+												</div>
+
+
+							<input type="submit" />
+					</form>
+					
+
+				</div>
+
+				<include file="import_result" />
+
+				<!-- END PAGE CONTENT-->
+
+<include file="../footer" />
