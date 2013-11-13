@@ -158,6 +158,7 @@ class SmsAction extends PublicAction {
 
 				}
 			}
+			/*
 			foreach ($countNum as $key => $value1) {
 				if(count($value1)>1) 	{
 					//更新状态为信息无效
@@ -186,6 +187,7 @@ class SmsAction extends PublicAction {
 				}
 
 			}
+			*/
 			
 			$this->assign('title_h2','导入成功');
 			$this->addBreadcrumbs(array(
@@ -201,4 +203,166 @@ class SmsAction extends PublicAction {
 			$this->error('上传失败');
 		}
     }
+
+   function batch(){
+   			//状态列表
+		$this->assign('statusList',getOrderStatus());
+   		$this->display();
+   }
+   function batchSave(){
+   		$data['status'] = intval($_POST['status']);
+   		$data['type'] = 'import_sms_batch_update';
+   		$Model = D('Order');
+   		$list = explode("\n",$_POST['mobile']);
+   		$count_success = 0;
+    	$count_error = 0;
+    	$count_ig = 0;
+    	$hasImport = array();
+   		foreach ($list as $key => $value) {
+   			if(empty($value)) continue;
+
+   			
+   			//查找
+   			
+   			$map['mobile'] = trim($value);
+
+   			$info = $Model->where($map)->select();
+
+   			foreach ($info as $row => $item) {
+
+   				if($hasImport[$item['id']]){
+   					continue;
+   				}else{
+   					$hasImport[$item['id']] = $item['id'];
+   				}
+
+   				$data['id'] = $item['id'];
+	   			$Model->create($data);
+	   			$res = $Model->save($data);
+
+	   			//echo $Model->getLastSql();
+	   			
+	   			if($res){
+	   				$count_success++;
+		   			$importResult[] = array(
+					'id'=>$item['id'],
+					'status' => '更新成功 '.getOrderStatus($data['status']),
+					'data' => print_r($value,true)
+					);
+	   			}else{
+	   				$count_error++;
+	   				$importResult[] = array(
+					'id'=>$item['id'],
+					'status' => '更新失败 '.getOrderStatus($data['status']),
+					'data' => print_r($value,true)
+					);
+	   			}
+   			}
+
+   		}
+
+   			$this->assign('importResult',$importResult);
+			$this->assign('countSuccess',$count_success);
+			$this->assign('countIg',$count_ig);
+			$this->assign('countError',$count_error);
+	    	$this->display('Public:import_result');
+
+
+   }
+   public function test(){
+
+
+   		$Model = D('Order');
+   		$list = $Model->select();
+   		$res  = array();
+   		foreach ($list as $key => $value) {
+   			//转换套餐编码
+   			/*
+				if(strpos($value['product_name'],'智选假日预付套票1' ) !== false){
+					$res[$value['id']]['智选假日预付套票1'] = $value['product_name'];
+				}
+				if(strpos($value['product_name'],'智选假日预付套票2') !== false){
+					$res[$value['id']]['智选假日预付套票2'] = $value['product_name'];
+
+				}
+				if(strpos($value['product_name'],'假日酒店预付套票') !== false || strpos($value['product_name'],'假日预付套票') !== false){
+					$res[$value['id']]['假日酒店预付套票'] = $value['product_name'];
+				}
+
+				if(strpos($value['product_name'],'休闲度假预付套票') !== false || strpos($value['product_name'],'高星休闲度假预付套票') !== false){
+					$res[$value['id']]['休闲度假预付套票'] = $value['product_name'];
+	
+				}
+*/
+				
+				if(strlen($value['product_name']) > 100){
+					$importResult[] = array(
+					'id'=>$value['id'],
+					'status' => $value['product_name'],
+					'data' => print_r($res[$value['id']],true)
+					);
+				}
+				if(count($res[$value['id']]) > 1){
+					
+					$importResult[] = array(
+					'id'=>$value['id'],
+					'status' => 'ok '.getOrderStatus($data['status']),
+					'data' => print_r($res[$value['id']],true)
+					);
+				}
+
+
+
+   		}
+				
+
+   		$this->assign('importResult',$importResult);
+			$this->assign('countSuccess',$count_success);
+			$this->assign('countIg',$count_ig);
+			$this->assign('countError',$count_error);
+	    	$this->display('Public:import_result');
+
+   }
+   /**
+    * 拉取手机号重复的前一个状态
+    * @return [type] [description]
+    */
+   public function testStatus(){
+   		$Model = D('Order');
+   		$list = $Model->where(array('status'=> 5))->select();
+
+   		foreach ($list as $key => $value) {
+   			//get last
+   			$cache = S('Order_'.$value['id']);
+   			if(count($cache)>1 ){
+   				$res = array();
+   				foreach($cache as $key1 => $c){
+	   				
+	   				$res[$key1]['id'] = $value['id'];
+	   				$res[$key1]['card'] = $c['card'];
+	   				$res[$key1]['status'] = getOrderStatus($c['status']);
+	   				$res[$key1]['type'] = $c['type'];
+	   				$res[$key1]['time'] = date('Y-m-d H:i:s',$c['sql_run_time']);
+   				}
+   			}else{
+   				continue;
+   			}
+
+   			//echo "".implode(",",$res)."\n";
+
+   			//continue;
+   			$count_success++;
+   			$importResult[] = array(
+					'id'=>$value['id'],
+					'status' => '['.$count_success.']<br />'.getOrderStatus($value['status']),
+					'data' => print_r($res,true)
+					);
+   		}
+
+   		$this->assign('importResult',$importResult);
+			$this->assign('countSuccess',$count_success);
+			$this->assign('countIg',$count_ig);
+			$this->assign('countError',$count_error);
+	    	$this->display('Public:import_result');
+   }
 }
