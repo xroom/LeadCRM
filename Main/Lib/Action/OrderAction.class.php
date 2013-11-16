@@ -183,7 +183,7 @@ class OrderAction extends PublicAction {
 				};
 
 				//判断订单状态
-				if($data['tmall_order_status'] != '买家已付款，等待卖家发货'){
+				if($data['tmall_order_status'] != '买家已付款，等待卖家发货' && $data['tmall_order_status'] != '卖家已发货，等待买家确认'){
 					Log::write('未付款，过滤'.$data['id'], Log::DEBUG);
 						$count_ig++;
 					$importResult[] = array(
@@ -536,9 +536,103 @@ class OrderAction extends PublicAction {
 				}
 
 				break;
-			case 7: //信息确认，准备注入
+			case 7: //信息确认，准备注入,马尼拉
+/*
+				$query = 'select order_id,card, product_name, deposit_id,product_id ,count, count*5 as nights
+				from ihg_order where 
+				(pay_status = 2 or pay_status = 3)
+				and card != ""
+				and LENGTH(card) = 9 
+				and status != 16 
+				order by order_id  ';
+*/
 
-			//break;
+				$query = 'select *, count*5 as nights
+				from ihg_order where 
+				(pay_status = 2 or pay_status = 3)
+				and (status = 7 or status = 9)
+				order by order_id  ';
+
+				$Model = D('Order');
+				$data = $Model->query($query);
+
+				$res[$count]['card'] = '"Tmall User Confirmed IRC No."';
+				$res[$count]['product_id'] = 'Deposit ID ';
+				$res[$count]['nights'] = 'Num of Free Night';
+				$res[$count]['fn_status'] = 'Loading Success (Y/N)';
+				$res[$count]['fm_desc'] = 'Error Description';
+				$res[$count]['product_name'] = 'Package Name';
+				$res[$count]['count'] = 'Num of Package';
+				$res[$count]['loyalty'] = 'Loyalty Offer Code';
+				$res[$count]['rate_code'] = 'Redemption Rate Code ';
+
+	
+				$count++;
+
+				foreach ($data as $key => $value) {
+
+					$res[$count]['card'] = $value['card'];
+					
+
+					switch(trim($value['product_id'])){
+						case 'TBHIX1':
+						$res[$count]['deposit_id'] = $value['product_id'];
+					$res[$count]['nights'] = $value['nights'];
+					$res[$count]['fn_status'] = '';
+					$res[$count]['fm_desc'] = '';
+							$res[$count]['product_name'] = 'Holiday Inn Express Type 1 Prepaid Package';
+							$res[$count]['count'] = $value['count'];
+							$res[$count]['loyalty'] = '8590440';
+							$res[$count]['rate_code'] = 'IVTF1';
+							break;
+						case 'TBHIX2':
+						$res[$count]['deposit_id'] = $value['product_id'];
+					$res[$count]['nights'] = $value['nights'];
+					$res[$count]['fn_status'] = '';
+					$res[$count]['fm_desc'] = '';
+							$res[$count]['product_name'] = 'Holiday Inn Express Type 2 Prepaid Package';
+							$res[$count]['count'] = $value['count'];
+							$res[$count]['loyalty'] = '8590441';
+							$res[$count]['rate_code'] = 'IVTF2';
+							break;
+						case 'TBHI01':
+						$res[$count]['deposit_id'] = $value['product_id'];
+					$res[$count]['nights'] = $value['nights'];
+					$res[$count]['fn_status'] = '';
+					$res[$count]['fm_desc'] = '';
+						$res[$count]['product_name'] = 'Holiday Inn Packcage ';
+							$res[$count]['count'] = $value['count'];
+							$res[$count]['loyalty'] = '8590442';
+							$res[$count]['rate_code'] = 'IVTF3';
+							break;
+						case 'TBLEIS':
+						$res[$count]['deposit_id'] = $value['product_id'];
+					$res[$count]['nights'] = $value['nights'];
+					$res[$count]['fn_status'] = '';
+					$res[$count]['fm_desc'] = '';
+						$res[$count]['product_name'] = 'Leisure Package ';
+							$res[$count]['count'] = $value['count'];
+							$res[$count]['loyalty'] = '8590443';
+							$res[$count]['rate_code'] = 'IVTF4';
+							break;
+
+					}
+
+					$count++;
+				}
+
+			break;
+			case 30:
+				//订单付款状态
+				$map = array();
+				$map['pay_status'] = intval($_GET['pay_status']);
+				$res = $Model->field('order_id,card,tmall_order_status,tmall_pay_level,tmall_order_close,pay_status')->where($map)->select();
+				foreach ($res as $key => $value) {
+					foreach ($value as $key1 => $value1) {
+						$res[$key][$key1] = iconv('UTF-8', 'gbk', $value1);
+					}
+				}
+				break;
 			default:
 				$map = array();
 				if(isset($_GET['status'])){
@@ -591,5 +685,209 @@ class OrderAction extends PublicAction {
 		$tags = iconv( 'gbk', 'utf-8', $tags); 
 
 		return $tags;
+	}
+	/**
+	 * 拆单
+	 * @return [type] [description]
+	 */
+	public function splitOrder(){
+		$Model = D('Order');
+		$list = $Model->query('select * from ihg_order  where LENGTH(product_name) > 100 order by count');
+
+		foreach ($list as $key => $value) {
+			//拆开产品名称
+			$nameList = explode('，',$value['product_name']);
+
+
+
+			
+
+
+
+
+			//更新旧的
+			$data_old['id'] = $value['id'];
+			$data_old['product_name'] = $nameList[0];
+			$data_old['count'] 	= 1;
+			$data_old['type'] = 'split_order_update';
+			$data_old['status'] = $value['status'];
+
+			//转换套餐编码
+			if(strpos($data_old['product_name'],'智选假日预付套票1' ) !== false){
+				$data_old['product_id'] = 'TBHIX1';
+				$data_old['deposit_id'] = 'IVTF1';
+			}else if(strpos($data_old['product_name'],'智选假日预付套票2') !== false){
+				$data_old['product_id'] = 'TBHIX2';
+				$data_old['deposit_id'] = 'IVTF2';
+
+			}else if(strpos($data_old['product_name'],'假日酒店预付套票') !== false || strpos($data_old['product_name'],'假日预付套票') !== false){
+				$data_old['product_id'] = 'TBHI01';
+				$data_old['deposit_id'] = 'IVTF3';
+
+			}else if(strpos($data_old['product_name'],'休闲度假预付套票') !== false || strpos($data_old['product_name'],'高星休闲度假预付套票') !== false){
+				$data_old['product_id'] = 'TBLEIS';
+				$data_old['deposit_id'] = 'IVTF4';
+			}else{
+				die('名称不符');
+			}
+
+
+
+			$Model->create($data_old);
+			$Model->save($data_old);
+
+			//添加新的
+			$data_new = $value;
+			unset($data_new['id']);
+
+			$data_new['product_name'] = $nameList[1];
+			$data_new['count']	 = 1;
+
+			//转换套餐编码
+			if(strpos($data_new['product_name'],'智选假日预付套票1' ) !== false){
+				$data_new['product_id'] = 'TBHIX1';
+				$data_new['deposit_id'] = 'IVTF1';
+			}else if(strpos($data_new['product_name'],'智选假日预付套票2') !== false){
+				$data_new['product_id'] = 'TBHIX2';
+				$data_new['deposit_id'] = 'IVTF2';
+
+			}else if(strpos($data_new['product_name'],'假日酒店预付套票') !== false || strpos($data_new['product_name'],'假日预付套票') !== false){
+				$data_new['product_id'] = 'TBHI01';
+				$data_new['deposit_id'] = 'IVTF3';
+
+			}else if(strpos($data_new['product_name'],'休闲度假预付套票') !== false || strpos($data_new['product_name'],'高星休闲度假预付套票') !== false){
+				$data_new['product_id'] = 'TBLEIS';
+				$data_new['deposit_id'] = 'IVTF4';
+			}else{
+				die('名称不符');
+			}
+
+			$data_new['type'] = 'split_order_create';
+			$data_new['status'] = $value['status'];
+
+//print_r($data_new);
+			$Model->create($data_new);
+			$res = $Model->add($data_new);
+
+			echo $res.'<br />';
+		}
+
+		
+
+	}
+	public function updatePayStatus(){
+		set_time_limit(0);
+    	header('Content-Type:text/html;charset=utf-8');
+    	$uploadInfo = $this->upload();
+    	$Model = D('Order');
+    	$count_success = 0;
+    	$count_error = 0;
+    	$count_ig = 0;
+    	$importResult = array();
+
+    	$Model = D('Order');
+    	if($uploadInfo){
+			$list = $this->getCsv('./Uploads/'.$uploadInfo[0]['savename']);
+			$result = array();
+			$count = 0;
+			foreach ($list as $key => $value) {
+				if($key == 0) continue; //过滤掉第一行
+				//Array ( [0] => 订单编号 [1] => 买家会员名 [2] => 买家支付宝账号 [3] => 买家应付货款 [4] => 买家应付邮费 [5] => 买家支付积分 [6] => 总金额 [7] => 返点积分 [8] => 买家实际支付金额 [9] => 买家实际支付积分 [10] => 订单状态 [11] => 买家留言 [12] => 收货人姓名 [13] => 收货地址 [14] => 运送方式 [15] => 联系电话 [16] => 联系手机 [17] => 订单创建时间 [18] => 订单付款时间 [19] => 宝贝标题 [20] => 宝贝种类 [21] => 物流单号 [22] => 物流公司 [23] => 订单备注 [24] => 宝贝总数量 [25] => 店铺Id [26] => 店铺名称 [27] => 订单关闭原因 [28] => 卖家服务费 [29] => 买家服务费 [30] => 发票抬头 [31] => 是否手机订单 [32] => 分阶段订单信息 [33] => 定金排名 [34] => 修改后的sku [35] => 修改后的收货地址 [36] => 异常信息 )
+
+				//判断订单号是否合法
+				$data = array();
+				$data['order_id'] = $value[0];
+				$data['tmall_name'] = $value[1];
+				$data['email']	= $value[2];
+				$data['tmall_order_status'] = $value[10];
+				$data['comment'] = $value[11];	
+				$data['comment_ob'] = $value[23];
+				$data['name'] = $value[12];
+				$data['address'] = $value[13];
+				$data['phone'] = str_replace("'",'',$value[15]);
+				$data['mobile'] = str_replace("'",'',$value[16]);
+				$data['product_name'] = $value[19];
+				$data['tmall_create_time'] = $value[17];
+				$data['count'] = $value[24];
+				$data['status'] = 0;
+				$update['tmall_pay_level'] = $value[32];
+				$update['tmall_order_close'] = $value[27];
+
+
+
+				if(strlen($data['order_id']) < 15 ){
+					$count_ig++;
+					die('ID不合法');
+				};
+
+				$update['pay_status'] = 0;
+
+				//判断订单付款状态
+				//全额
+				if(($data['tmall_order_status'] == '买家已付款，等待卖家发货' 
+					|| $data['tmall_order_status'] == '卖家已发货，等待买家确认'
+					|| $data['tmall_order_status'] == '交易成功')
+					&& $update['tmall_pay_level'] == '' 
+					&& $update['tmall_order_close'] == '订单未关闭' 
+					){
+					
+					//echo $update['order_id'].' 全款'.' '.$data['tmall_order_status'].$data['tmall_order_close'].$data['tmall_pay_level'].'<br />';
+					$count_success++;
+					$update['pay_status'] = 3;
+				}
+
+
+				$tmpLevel = explode(';',$update['tmall_pay_level']);
+				$update['tmall_pay_level2'] = $tmpLevel[1];
+
+				//付尾款
+				if(($data['tmall_order_status'] == '买家已付款，等待卖家发货' 
+					|| $data['tmall_order_status'] == '卖家已发货，等待买家确认'
+					)
+					&& strpos($update['tmall_pay_level2'], '阶段2') !== false 
+					&& (strpos($update['tmall_pay_level2'], '交易状态等待卖家操作') !== false  
+						|| strpos($update['tmall_pay_level2'],'交易状态等待买家确认') !== false)
+					&& $update['tmall_order_close'] == '订单未关闭' 
+					){
+					
+					//echo $data['order_id'].' 付尾款'.' '.$data['tmall_order_status'].$data['tmall_order_close'].$data['tmall_pay_level'].'<br />';
+					$count_error++;
+					$update['pay_status'] = 2;
+				}
+
+				//未付尾款
+				if($data['tmall_order_status'] == '交易关闭' 
+					&& strpos($update['tmall_pay_level2'], '阶段2') !== false 
+					&& (strpos($update['tmall_pay_level2'], '交易状态已关闭') !== false  
+						) 
+					&& $update['tmall_order_close'] == '退款' 
+					){
+					
+					echo $update['order_id'].' 未付尾款'.' '.$data['tmall_order_status'].$update['tmall_order_close'].$update['tmall_pay_level'].'<br />';
+					$count_ig++;
+
+					$update['pay_status'] = 1;
+				}
+
+				//print_r($update);
+				$update['type'] =  'update_order_pay_status';
+				$Model->create($update);
+				$Model->where(array('order_id'=>$data['order_id']))->save($update);
+				//echo $Model->getLastSql().'<br />';
+
+				//exit;
+				
+			}
+		}
+
+		echo $count_success.' '.$count_error.' '.$count_ig;
+		/*
+		$this->assign('importResult',$importResult);
+		$this->assign('countSuccess',$count_success);
+		$this->assign('countError',$count_error);
+		$this->assign('countIg',$count_ig);
+
+    	$this->display('Public:import_result');
+    	*/
 	}
 }
