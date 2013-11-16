@@ -228,7 +228,8 @@ class SmsAction extends PublicAction {
    			foreach ($list as $key => $value) {
    				if(empty($value)) continue; 
    				$card = explode("\t",$value);
-   				if(empty($card[1]) || strlen($card[1]) != 9){ //如果卡号不为11,则忽略
+   				$card[1] = trim($card[1]);
+   				if(strlen($card[1]) != 9){ //如果卡号不为9,则忽略
    					$count_ig++;
 	   				$importResult[] = array(
 					'id'=>'',
