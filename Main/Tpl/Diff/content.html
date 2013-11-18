@@ -1,0 +1,116 @@
+<link rel="stylesheet" href="media/css/DT_bootstrap.css" />
+<div class="row-fluid">
+
+</div>
+
+<a href="__URL__/index/start/0/end/1000">0-1000</a> 
+<a href="__URL__/index/start/1001/end/2000">1001-2000</a> 
+<a href="__URL__/index/start/2001/end/3000">2001-3000</a> 
+<a href="__URL__/index/start/3001/end/4000">3001-4000</a> 
+<a href="__URL__/index/start/4001/end/5000">4001+</a> 
+
+
+<div class="row-fluid">
+
+					<div class="span12">
+
+					
+
+
+						<!-- BEGIN SAMPLE TABLE PORTLET-->           
+
+						<div class="portlet box grey">
+
+							<div class="portlet-title">
+
+								<div class="caption"><i class="icon-shopping-cart"></i>{$title_h2}</div>
+
+							
+
+							</div>
+{$orders}
+							<div class="portlet-body">
+							不同的总数：{$total}  相同总数：{$total_success}
+								<table class="table table-striped table-bordered table-advance table-hover">
+
+									<thead>
+
+										<tr>
+
+											<th><i class="icon-briefcase"></i>ID</th>
+											<th>订单编码</th>
+											<th>手机号</th>
+											<th>当前卡号</th>
+											<th>卡号变更</th>
+											
+											<th></th>
+
+										</tr>
+
+									</thead>
+
+									<tbody>
+										<volist name="list" id="item">
+										<tr >
+
+											<td><a href="__APP__/Order/edit/id/{$item.id}" >{$item.id}</a></td>
+											<td class="hidden-phone">{$item.order_id}</td>
+											<td>{$item.mobile}</td>
+											<td>
+											 <if condition="$item.diff eq true " >
+
+											 <span style="background-color:red">[{$item.card}]</span>
+											  <else />
+											 [{$item.card}] {$item.status|getOrderStatus} {$item.pay_status|getPayStatus}
+											 </if>
+
+											 </td>
+											<td>
+											[会员备注]<br />
+											[<span style="font-weight:bold">{$item.card_comment.card}]</span><br/>
+											{$item.card_comment.time}
+											<hr />
+											[旺旺备注]<br />
+											<span style="font-weight:bold">{$item.card_ob.card}</span><br/>
+											{$item.card_ob.time} 或者　17日数据库更新
+												
+											<hr />
+											[操作日志]<br />
+											<volist name="item.card_log" id="log">
+											
+											<span style="font-weight:bold">{$log.card}</span><br />
+											{$log.time|dateformat="Y-m-d H:i:s"}<br />
+											{$log.type}
+											<hr />
+											</volist>
+
+											[手机号]<br />
+											<volist name="item.card_mobile" id="mobile">
+											
+											<span style="font-weight:bold">{$mobile.card}</span><br />
+											{$mobile.time}<br />
+											<hr />
+											</volist>
+												
+											</td>
+											<td><a href="__APP__/Order/edit/id/{$item.id}" class="btn mini green-stripe" target="_blank">处理</a></td>
+
+										</tr>
+										</volist>
+
+
+									</tbody>
+
+								</table>
+								<div class="row-fluid">
+								{$page}
+								</div>
+							</div>
+
+						</div>
+
+						<!-- END SAMPLE TABLE PORTLET-->
+
+					</div>
+
+				</div>

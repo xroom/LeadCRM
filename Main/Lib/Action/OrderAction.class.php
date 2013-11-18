@@ -51,6 +51,10 @@ class OrderAction extends PublicAction {
 
 		}
 
+		if(!empty($_GET['pay_status'])){
+			$map['pay_status'] = intval($_GET['pay_status']);
+		}
+
 
 		//获取数据
 		$Model = D('Order');
@@ -135,6 +139,8 @@ class OrderAction extends PublicAction {
      * 导入数据
      */
     public function importData(){
+    	$this->error('基本导入功能，暂停');
+    	exit;
     	set_time_limit(0);
     	header('Content-Type:text/html;charset=utf-8');
     	$uploadInfo = $this->upload();
@@ -547,16 +553,17 @@ class OrderAction extends PublicAction {
 				order by order_id  ';
 */
 
-				$query = 'select *, count*5 as nights
-				from ihg_order where 
-				(pay_status = 2 or pay_status = 3)
-				and (status = 7 or status = 9)
-				order by order_id  ';
+				$query = 'select *, count*5 as nights 
+				from ihg_order where 1 
+				and card != "" 
+				and (status = 7 or status = 17  ) 
+				order by card  ';
 
 				$Model = D('Order');
 				$data = $Model->query($query);
-
-				$res[$count]['card'] = '"Tmall User Confirmed IRC No."';
+				$res = array();
+				$res[$count]['id'] = '#ID';
+				$res[$count]['card'] = 'Tmall User Confirmed IRC No.';
 				$res[$count]['product_id'] = 'Deposit ID ';
 				$res[$count]['nights'] = 'Num of Free Night';
 				$res[$count]['fn_status'] = 'Loading Success (Y/N)';
@@ -565,12 +572,13 @@ class OrderAction extends PublicAction {
 				$res[$count]['count'] = 'Num of Package';
 				$res[$count]['loyalty'] = 'Loyalty Offer Code';
 				$res[$count]['rate_code'] = 'Redemption Rate Code ';
+				$res[$count]['order_id'] = 'Order ID ';
 
-	
 				$count++;
 
 				foreach ($data as $key => $value) {
 
+					$res[$count]['id'] = $value['id'];
 					$res[$count]['card'] = $value['card'];
 					
 
@@ -618,15 +626,103 @@ class OrderAction extends PublicAction {
 
 					}
 
+					$res[$count]['order_id'] = $value['order_id'];
+
 					$count++;
 				}
 
+			break;
+			case 18:
+
+			$query = 'select *, count*5 as nights 
+				from ihg_order where 1 
+				and card != "" 
+				and (status = 18 ) 
+				order by card  ';
+
+				$Model = D('Order');
+				$data = $Model->query($query);
+				$res = array();
+				$res[$count]['id'] = '#ID';
+				$res[$count]['card'] = 'Tmall User Confirmed IRC No.';
+				$res[$count]['product_id'] = 'Deposit ID ';
+				$res[$count]['nights'] = 'Num of Free Night';
+				$res[$count]['fn_status'] = 'Loading Success (Y/N)';
+				$res[$count]['fm_desc'] = 'Error Description';
+				$res[$count]['product_name'] = 'Package Name';
+				$res[$count]['count'] = 'Num of Package';
+				$res[$count]['loyalty'] = 'Loyalty Offer Code';
+				$res[$count]['rate_code'] = 'Redemption Rate Code ';
+				$res[$count]['order_id'] = 'Order ID ';
+
+				$count++;
+
+				foreach ($data as $key => $value) {
+
+					for($i=1;$i <= $value['nights']; $i++ ){
+						$res[$count]['id'] = $value['id'];
+						$res[$count]['card'] = $value['card'];
+						
+
+						switch(trim($value['product_id'])){
+							case 'TBHIX1':
+							$res[$count]['deposit_id'] = $value['product_id'];
+						//$res[$count]['nights'] = $value['nights'];
+						$res[$count]['nights'] = 1;
+						$res[$count]['fn_status'] = '';
+						$res[$count]['fm_desc'] = '';
+								$res[$count]['product_name'] = 'Holiday Inn Express Type 1 Prepaid Package';
+								$res[$count]['count'] = $value['count'];
+								$res[$count]['loyalty'] = '8590440';
+								$res[$count]['rate_code'] = 'IVTF1';
+								break;
+							case 'TBHIX2':
+							$res[$count]['deposit_id'] = $value['product_id'];
+						//$res[$count]['nights'] = $value['nights'];
+						$res[$count]['nights'] = 1;
+						$res[$count]['fn_status'] = '';
+						$res[$count]['fm_desc'] = '';
+								$res[$count]['product_name'] = 'Holiday Inn Express Type 2 Prepaid Package';
+								$res[$count]['count'] = $value['count'];
+								$res[$count]['loyalty'] = '8590441';
+								$res[$count]['rate_code'] = 'IVTF2';
+								break;
+							case 'TBHI01':
+							$res[$count]['deposit_id'] = $value['product_id'];
+						//$res[$count]['nights'] = $value['nights'];
+						$res[$count]['nights'] = 1;
+						$res[$count]['fn_status'] = '';
+						$res[$count]['fm_desc'] = '';
+							$res[$count]['product_name'] = 'Holiday Inn Packcage ';
+								$res[$count]['count'] = $value['count'];
+								$res[$count]['loyalty'] = '8590442';
+								$res[$count]['rate_code'] = 'IVTF3';
+								break;
+							case 'TBLEIS':
+							$res[$count]['deposit_id'] = $value['product_id'];
+						//$res[$count]['nights'] = $value['nights'];
+						$res[$count]['nights'] = 1;
+						$res[$count]['fn_status'] = '';
+						$res[$count]['fm_desc'] = '';
+							$res[$count]['product_name'] = 'Leisure Package ';
+								$res[$count]['count'] = $value['count'];
+								$res[$count]['loyalty'] = '8590443';
+								$res[$count]['rate_code'] = 'IVTF4';
+								break;
+
+						}
+
+						$res[$count]['order_id'] = $value['order_id'];
+
+						$count++;
+					}//end for
+				}
 			break;
 			case 30:
 				//订单付款状态
 				$map = array();
 				$map['pay_status'] = intval($_GET['pay_status']);
-				$res = $Model->field('order_id,card,tmall_order_status,tmall_pay_level,tmall_order_close,pay_status')->where($map)->select();
+				$res = $Model->field('order_id, tmall_name, mobile, card,tmall_order_status,tmall_pay_level,tmall_order_close,pay_status')->where($map)->select();
 				foreach ($res as $key => $value) {
 					foreach ($value as $key1 => $value1) {
 						$res[$key][$key1] = iconv('UTF-8', 'gbk', $value1);
@@ -659,9 +755,9 @@ class OrderAction extends PublicAction {
 
 		//导出逻辑
 		if($_SERVER['HTTP_HOST'] != 'localhost'){
-		$filename = './Downloads/export_'.getOrderStatus($_GET['status']).'_'.mktime().'.csv';
+		$filename = './Downloads/export_'.getOrderStatus($_GET['status']).'_'.date('Y_m_d_H_s').'.csv';
 	}else{
-		$filename = './Downloads/export_'.($_GET['status']).'_'.mktime().'.csv';
+		$filename = './Downloads/export_'.($_GET['status']).'_'.date('Y_m_d_H_s').'.csv';
 
 	}
 		$this->exportCSV($filename,$res);
@@ -889,5 +985,62 @@ class OrderAction extends PublicAction {
 
     	$this->display('Public:import_result');
     	*/
+	}
+	public function updateComment(){
+		set_time_limit(0);
+    	header('Content-Type:text/html;charset=utf-8');
+    	//$uploadInfo = $this->upload();
+    	$Model = D('Order');
+    	$count_success = 0;
+    	$count_error = 0;
+    	$count_ig = 0;
+    	$importResult = array();
+    	$uploadInfo[0]['savename'] = '52881defa1a3e.csv';
+    	$Model = D('Order');
+    	if($uploadInfo){
+    		
+			$list = $this->getCsv('./Uploads/'.$uploadInfo[0]['savename']);
+
+			$result = array();
+			$count = 0;
+			//var_dump($list);
+			//exit;
+			foreach ($list as $key => $value) {
+				if($key == 0) continue; //过滤掉第一行
+$data = array();
+				$data['order_id'] = $value[0];
+				$data['comment_ob'] = $value[23];
+
+				preg_match_all( "/\d+/", $data['comment_ob'], $numList );
+
+				if(count($numList[0]) == 0){
+
+					$data['status'] = 3;
+				}else{
+					foreach ($numList[0] as $key1 => $value1) {
+						if(strlen($value1) == 9){
+							$data['card'] 	= $value1;
+							$data['status'] = 2;
+						}
+					}
+					if(empty($data['card'])){
+						$data['status'] = 1;
+					}
+				}
+
+				if($data['status'] != 2){
+
+					continue;
+				}
+				//$info = $Model->where(array('order_id'=>$data['order_id']))->find();
+				//if($info['card'] != '' && $info['card'] != $data['card']){
+				//	echo 'update ihg_order set  card = '.$data['card'].', status = 7 , comment_ob = '.$data['comment_ob'].' where order_id = '.$data['order_id'].";\n";
+				//}
+				//echo implode(',',$data)."\n";
+				
+				echo 'update ihg_order set   comment_ob = "'.trim($data['comment_ob']).'" where order_id = '.$data['order_id'].";\n";
+
+			}
+		}
 	}
 }

@@ -227,8 +227,10 @@ class SmsAction extends PublicAction {
    		if(isset($_POST['importCard'])){
    			foreach ($list as $key => $value) {
    				if(empty($value)) continue; 
+				
    				$card = explode("\t",$value);
-   				$card[1] = trim($card[1]);
+				$card[1] = trim($card[1]);
+				
    				if(strlen($card[1]) != 9){ //如果卡号不为9,则忽略
    					$count_ig++;
 	   				$importResult[] = array(
@@ -242,6 +244,15 @@ class SmsAction extends PublicAction {
    				$map['mobile'] = $card[0];
    				$info = $Model->where($map)->select();
 
+				if(empty($info)){
+					$count_ig++;
+	   				$importResult[] = array(
+					'id'=>'',
+					'status' => '没有找到该手机号',
+					'data' => print_r($card,true)
+					);
+					continue;
+				}
 	   			foreach ($info as $row => $item) {
 
 	   				if($hasImport[$item['id']]){
@@ -428,5 +439,58 @@ class SmsAction extends PublicAction {
 			$this->assign('countIg',$count_ig);
 			$this->assign('countError',$count_error);
 	    	$this->display('Public:import_result');
+   }
+    public function exportData(){
+
+		//get all data 
+		$query = 'SELECT * ,count(mobile) as mobile_count FROM `ihg_order` WHERE pay_status in(2,3)   group by mobile';
+		$Model = D('Order');
+		$mobileList = $Model->query($query);
+		
+		foreach($mobileList as $key=>$value){
+			//手机号重复的
+			//if($value['mobile_count'] > 1){
+				//找到相关手机号
+				$map['mobile'] = $value['mobile'];
+				$items = $Model->where($map)->select();
+				
+				$productName = array();
+				$card = '';
+				$orderId = array();
+				foreach($items as $key1 => $value1){
+					$productName[$value1['product_name']] = 1;
+					if(!empty($value1['card'])){
+						$card[$value1['card']] = 1;
+					}
+					$orderId[$value1['order_id']] = 1;
+				}
+				
+				/*
+				print_r($productName);
+				print_r($card);
+*/
+
+				$res['mobile'] = $value['mobile'];
+				$res['mobile_count'] = $value['mobile_count'];
+
+				$res['tmall_name'] = $value['tmall_name'];
+
+				$res['product_name_count'] = empty($productName)?0:count($productName);
+				$res['product_name'] = implode('|',array_keys($productName));
+
+				$res['card_count'] = empty($card)?0:count($card);
+				$res['card'] = implode('|',array_keys($card));
+
+				$res['order_id_count'] = empty($orderId)?0:count($orderId);
+				$res['order_id'] = "\t".implode('|',array_keys($orderId));
+
+
+				echo implode(',',$res)."\n";
+
+
+				
+			//}
+		}
+
    }
 }

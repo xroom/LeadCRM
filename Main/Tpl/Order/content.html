@@ -18,6 +18,12 @@
 编号：<input type="text" name="id" /><br />
 淘宝ID：<input type="text" name="tmall_name" />
 姓名：<input type="text" name="name" />
+付款状态：<select name="pay_status">
+<option value="">-</option>
+	<option value="1">未付尾款</option>
+	<option value="2">已付尾款</option>
+	<option value="3">付全款</option>
+</select>
 <input type="hidden" value="/Order/index" name="s" />
 <input type="submit" value="搜索"/>
 </div>
@@ -76,7 +82,7 @@
 											<td><a href="__URL__/index/mobile/{$item.mobile}">{$item.mobile}</a></td>
 											<td>{$item.card}</td>
 											<td>{$item.tmall_create_time}</td>
-											<td><span class="label {$item.status|getOrderStatusLabel} label-mini">{$item.status|getOrderStatus}</span></td>
+											<td><span class="label {$item.status|getOrderStatusLabel} label-mini">{$item.status|getOrderStatus}</span>{$item.pay_status|getPayStatus}</td>
 											<td><a href="__APP__/Order/edit&id={$item.id}" class="btn mini green-stripe">View</a></td>
 
 										</tr>

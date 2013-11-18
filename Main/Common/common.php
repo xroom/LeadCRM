@@ -18,7 +18,8 @@
     14 =>'退款',
     15 =>'信息无效',
     16 =>'多人共享',
-
+	17 =>'默认确认卡号',
+  18 => '马尼拉',
     );
 
    if(is_null($str)){
@@ -100,6 +101,22 @@ function getTimelineStatus($status = null){
       }else{
         return $status;
       }
+
+   }
+}
+function getPayStatus($str = null){
+   $data = array(
+    1 =>'未付尾款',
+    2 =>'已付尾款',
+    3 =>'全额支付',
+   
+
+    );
+
+   if(is_null($str)){
+    return $data;
+   }else{
+     return $data[$str];
 
    }
 }

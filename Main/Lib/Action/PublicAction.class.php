@@ -51,7 +51,7 @@ class PublicAction extends Action {
 
         import('ORG.Net.UploadFile');
         $upload = new UploadFile();// 实例化上传类
-        $upload->maxSize  = 3145728 ;// 设置附件上传大小
+        $upload->maxSize  = 6145728 ;// 设置附件上传大小
         $upload->allowExts  = array('jpg', 'gif', 'png', 'jpeg', 'csv','xls','xlsx');// 设置附件上传类型
         $upload->savePath =  './Uploads/';// 设置附件上传目录
          if(!$upload->upload()) {// 上传错误提示错误信息
