@@ -39,4 +39,29 @@ class CardAction extends PublicAction {
 
 	}
 
+	public function splitCard(){
+		$this->error('已经拆分');
+		$Model = D('Order');
+		$ModelCard = D('Card');
+		$list = $Model->select();
+
+		foreach ($list as $key => $value) {
+
+			for($i=0;$i<$value['count'];$i++){
+				# code...
+				$data = array();
+				$data['order_id'] = $value['id'];
+				$data['card'] = $value['card'];
+				$data['product_id'] = $value['product_id'];
+				$data['name'] = $value['name'];
+				$data['nights'] = 5; 
+
+				$ModelCard->create($data);
+				$ModelCard->add($data);
+			}
+
+
+		}
+	}
+
 }

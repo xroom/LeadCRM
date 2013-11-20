@@ -57,14 +57,16 @@
 
 										<tr>
 
-											<th><i class="icon-briefcase"></i> ID</th>
+										
 											<th>天猫订单号</th>
 											<th class="hidden-phone"><i class="icon-user"></i> 姓名</th>
 
 											<th><i class="icon-phone"></i> 电话</th>
-											<th>卡号</th>
-											<th>订单时间</th>
+											<th>天猫用户名</th>
+											<th>套餐</th>
+											<th>剩余房晚</th>
 											<th><i class="icon-stat"></i> 状态</th>
+											<th><i class="icon-stat"></i> 付款状态</th>
 											<th></th>
 
 										</tr>
@@ -75,15 +77,18 @@
 										<volist name="list" id="item">
 										<tr>
 
-											<td><a href="__APP__/Order/edit/id/{$item.id}">{$item.id}</a></td>
+											
 											<td><a href="__APP__/Order/edit/id/{$item.id}">{$item.order_id}</a></td>
 
 											<td class="hidden-phone">{$item.name}</td>
 
 											<td><a href="__URL__/index/mobile/{$item.mobile}">{$item.mobile}</a></td>
-											<td>{$item.card}</td>
-											<td>{$item.tmall_create_time}</td>
-											<td><span class="label {$item.status|getOrderStatusLabel} label-mini">{$item.status|getOrderStatus}</span>{$item.pay_status|getPayStatus}</td>
+											<td>{$item.tmall_name}</td>
+											<td>{$item.count} </td>
+											<td><php> echo $item['count'] * 5;</php></td>
+											<td><span class="label {$item.status|getOrderStatusLabel} label-mini">{$item.status|getOrderStatus}</span></td>
+											<td>
+											<span class="label {$item.pay_status|getOrderStatusLabel} ">{$item.pay_status|getPayStatus}</span></td>
 											<td><a href="__APP__/Order/edit&id={$item.id}" class="btn mini green-stripe">View</a></td>
 
 										</tr>

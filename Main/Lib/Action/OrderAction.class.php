@@ -112,7 +112,7 @@ class OrderAction extends PublicAction {
 			$data['card'] = $vo['card'];
 			$data['product_id'] = $vo['product_id'];
 			$data['name'] = $vo['name'];
-			$data['nights'] = $vo['count'] * 5;
+			$data['nights'] = 5; 
 
 			$ModelCard->create($data);
 			for($i=0;$i<$vo['count'];$i++){
@@ -159,7 +159,8 @@ class OrderAction extends PublicAction {
 			//$data['name'] = $vo['name'];
 			//$data['nights'] = $vo['count'] * 5;
 			$data['id'] = $key;
-
+			$data['type'] = 'update_card';
+			$data['order_id'] = intval($_POST['id']);
 			
 			$ModelCard->create($data);
 			$res = $ModelCard->save($data);
@@ -168,11 +169,14 @@ class OrderAction extends PublicAction {
 
    		//echo $Model->getLastSql();
    		//exit;
-   		if($result || $res ){
+   		$this->success('更新成功', cookie('return_url'));
+   		/*
+   		if($result || $res){
    			$this->success('更新成功', cookie('return_url'));
    		}else{
    			$this->error('更新失败');
    		}
+   		*/
     }
     public function import(){
     	$this->assign('title_h2','导入天猫数据');
