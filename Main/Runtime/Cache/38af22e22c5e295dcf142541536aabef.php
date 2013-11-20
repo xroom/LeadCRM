@@ -636,6 +636,13 @@
 							导入短信回复内容</a>
 
 						</li>
+						<li class="<?php echo ($active_sms_import); ?>">
+
+							<a href="__APP__/Sms/batch">
+
+							批量更改状态</a>
+
+						</li>
 
 					</ul>
 				</li><?php endif; ?>
@@ -922,7 +929,7 @@
 
 				<div class="row-fluid">
 
-					<form id="fileupload" action="__URL__/importData" method="POST" enctype="multipart/form-data">
+					<form id="fileupload" action="__URL__/updateComment" method="POST" enctype="multipart/form-data">
 
 							<!-- BEGIN PAGE LEVEL STYLES -->
 

@@ -99,14 +99,48 @@ class OrderAction extends PublicAction {
 		$this->assign('obInfo',$obInfo);
 
 
+		//获取卡号信息
+		$ModelCard = D('Card');
+		$mapCard['order_id'] = $vo['id'];
+		$cardList = $ModelCard->where($mapCard)->select();
+
+		if(empty($cardList)){
+			$this->error('未找到多卡信息');
+			//如果没有分配卡号，则生成
+			$data = array();
+			$data['order_id'] = $vo['id'];
+			$data['card'] = $vo['card'];
+			$data['product_id'] = $vo['product_id'];
+			$data['name'] = $vo['name'];
+			$data['nights'] = $vo['count'] * 5;
+
+			$ModelCard->create($data);
+			for($i=0;$i<$vo['count'];$i++){
+				$res = $ModelCard->add($data);
+
+				$cardList[$i] = $data;
+				$cardList[$i]['id'] = $res ;
+			}
+
+
+		}
+		$this->assign('cardList',$cardList);
+
 		//获取更新日志
 		$this->assign('log',S('Order_'.$filter['id']));
     	$this->display();
     }
     public function update(){
 
+    	foreach ($_POST['card'] as $key => $value) {
+    		if(empty($value)){
+    			$this->error('卡号不能为空');
+    		}
+    	}
+
+
    		$Model = D('Order');
-   		
+   		$ModelCard = D('Card');
 
    		//更新拼音
    		$_POST['name_py'] = $this->convertPinyin($_POST['name_py']);
@@ -116,12 +150,25 @@ class OrderAction extends PublicAction {
    		$Model->create();
    		$result = $Model->save();
 
-   		//更新拼音
+   		//更新卡号
+   		foreach ($_POST['card'] as $key => $value) {
+   			$data = array();
+			//$data['order_id'] = $vo['id'];
+			$data['card'] = $value;
+			//$data['product_id'] = $vo['product_id'];
+			//$data['name'] = $vo['name'];
+			//$data['nights'] = $vo['count'] * 5;
+			$data['id'] = $key;
 
+			
+			$ModelCard->create($data);
+			$res = $ModelCard->save($data);
+
+   		}
 
    		//echo $Model->getLastSql();
    		//exit;
-   		if($result){
+   		if($result || $res ){
    			$this->success('更新成功', cookie('return_url'));
    		}else{
    			$this->error('更新失败');
